@@ -7,10 +7,10 @@ SOLUCION.
 crear sistema administrativo sencillo para el albergue de adultos mayores consiste en una base de datos y un programa con interfaz grafica.
 ## 👥 Integrantes del equipo
 
-| N.º | Nombre del integrante | Rol |
-|:---:|------------------------|-----|
-| 1 |Alejandro Antonio Quispe Urizacari| Líder del proyecto, programador |
-| 2 | Dalmir calamares palluca| publicista, programador |
-| 3 |Jhilmar Jadiel Luna Gisbert | desarrollador, programador|
-| 4 | Daniel wilfredo pomarez Huaranca | programador |
-| 5 | Apolo Omar Vasquez Peralta | programador |
+| N.º | Nombre del integrante | Rol | Usuario de GitHub |
+|:---:|------------------------|-----|-------------------|
+| 1 | Alejandro Antonio Quispe Urizacari | Líder del proyecto, programador | alejandro antonio |
+| 2 | Dalmir Calamares Palluca | Publicista, programador | dalbug03-eng |
+| 3 | Jhilmar Jadiel Luna Gisbert | Desarrollador, programador | jhilmarjadiellunagisbert-ux |
+| 4 | Daniel Wilfredo Pomarez Huaranca | Programador | @wilfred2407 |
+| 5 | Apolo Omar Vasquez Peralta | Programador | apolo vasquez |

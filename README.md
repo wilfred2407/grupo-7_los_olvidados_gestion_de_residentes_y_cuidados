@@ -13,4 +13,4 @@ crear sistema administrativo sencillo para el albergue de adultos mayores consis
 | 2 | Dalmir Calamares Palluca | Publicista, programador | dalbug03-eng |
 | 3 | Jhilmar Jadiel Luna Gisbert | Desarrollador, programador | jhilmarjadiellunagisbert-ux |
 | 4 | Daniel Wilfredo Pomarez Huaranca | Programador | @wilfred2407 |
-| 5 | Apolo Omar Vasquez Peralta | Programador | apolo vasquez |
+| 5 | Apolo Omar Vasquez Peralta | Programador | peraltaomar409-409-cloud |

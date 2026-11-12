@@ -5,6 +5,10 @@ se identificado un problema en el albergue como el hogar de san Ramon la informa
 Sin un sistema central ya que causan errores en los cuidados y los horarios del personal.
 SOLUCION.
 crear sistema administrativo sencillo para el albergue de adultos mayores consiste en una base de datos y un programa con interfaz grafica.
+cabe recalcar que ciertos datos y aspectos del problema son propuestos de parte del grupo 
+ya que no esta verificado al 100% los datos .
+asi adjuntamos la tabla de los integrantes del grupos (integrantes del equipo)
+
 ## 👥 Integrantes del equipo
 
 | N.º | Nombre del integrante | Rol | Usuario de GitHub |

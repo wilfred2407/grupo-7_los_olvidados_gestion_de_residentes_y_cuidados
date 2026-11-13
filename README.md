@@ -1,6 +1,5 @@
 #  Grupo#7_Los_Olvidados
-# Gestion_de_residentes_y_cuidados_y
-# Asignacion_de_turnos_de_cuidadores
+# Gestion_de_residentes_y_cuidados_y_Asignacion_de_turnos_de_cuidadores
 # CASA_HOGAR_SAN_RAMON_LA_PAZ
 # DESCRIPCION DEL PROYECTO.
 # PROBLEMA 

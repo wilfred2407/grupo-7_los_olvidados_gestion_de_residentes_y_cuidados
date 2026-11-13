@@ -2,6 +2,7 @@
 # Gestion_de_residentes_y_cuidados_y_Asignacion_de_turnos_de_cuidadores
 # CASA_HOGAR_SAN_RAMON_LA_PAZ
 # DESCRIPCION DEL PROYECTO/PRESENTACION DEL CASO
+ver los recursos de las personas mayores de edad y gestionar el turnos de los médicos.
 El Hogar San Ramón, un albergue de escasos recursos en la zona sur de La Paz que atiende a 265 adultos mayores en situación de vulnerabilidad(2017),
 enfrenta grandes desafíos operativos al gestionar en papel o de memoria tanto las necesidades médicas, 
 alimenticias y terapéuticas de cada residente como los turnos continuos de su personal.

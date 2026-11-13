@@ -10,7 +10,7 @@ Para evitar olvidos o confusiones en esta atención ininterrumpida, el proyecto 
 con base de datos enfocado en centralizar la gestión de cuidados y organizar la asignación de horarios de los cuidadores.
 # PROBLEMA 
 se identificado un problema en el albergue como el hogar de san Ramon la informacion de los residentes y turnos del personal se manejan de forma manual
-Sin un sistema central ya que causan errores en los cuidados y los horarios del personal.
+Sin un sistema central el personal no podra encargarse del de San Ramón y las personas mayores de edad ya que causan errores en los cuidados y los horarios del personal.
 # SOLUCION.
 crear sistema administrativo sencillo para el albergue de adultos mayores consiste en una base de datos y un programa con interfaz grafica.
 cabe recalcar que ciertos datos y aspectos del problema son propuestos de parte del grupo 

@@ -21,8 +21,8 @@ asi adjuntamos la tabla de los integrantes del grupos (integrantes del equipo).
 
 | N.º | Nombre del integrante | Rol | Usuario de GitHub |
 |:---:|------------------------|-----|-------------------|
-| 1 | Alejandro Antonio Quispe Urizacari | Líder del proyecto, programador | alejandro antonio |
-| 2 | Dalmir Calamares Palluca | Publicista, programador | dalbug03-eng |
-| 3 | Jhilmar Jadiel Luna Gisbert | Desarrollador, programador | jhilmarjadiellunagisbert-ux |
-| 4 | Daniel Wilfredo Pomarez Huaranca | Programador | @wilfred2407 |
-| 5 | Apolo Omar Vasquez Peralta | Programador | peraltaomar409-409-cloud |
+| 1 | Alejandro Antonio Quispe Urizacari | Líder del proyecto, programador. | alejandro antonio |
+| 2 | Dalmir Calamares Palluca | Publicista, programador. | dalbug03-eng |
+| 3 | Jhilmar Jadiel Luna Gisbert | Desarrollador, programador. | jhilmarjadiellunagisbert-ux |
+| 4 | Daniel Wilfredo Pomarez Huaranca | Programador. | @wilfred2407 |
+| 5 | Apolo Omar Vasquez Peralta | Programador. | peraltaomar409-409-cloud |

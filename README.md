@@ -1,9 +1,9 @@
 #  grupo#7 los_olvidados_gestion_de_residentes_y_cuidados
-DESCRIPCION DEL PROYECTO.
-PROBLEMA 
+# DESCRIPCION DEL PROYECTO.
+# PROBLEMA 
 se identificado un problema en el albergue como el hogar de san Ramon la informacion de los residentes y turnos del personal se manejan de forma manual
 Sin un sistema central ya que causan errores en los cuidados y los horarios del personal.
-SOLUCION.
+# SOLUCION.
 crear sistema administrativo sencillo para el albergue de adultos mayores consiste en una base de datos y un programa con interfaz grafica.
 cabe recalcar que ciertos datos y aspectos del problema son propuestos de parte del grupo 
 ya que no esta verificado al 100% los datos .

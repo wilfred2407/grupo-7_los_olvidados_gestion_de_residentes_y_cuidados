@@ -1,4 +1,7 @@
-#  grupo#7 los_olvidados_gestion_de_residentes_y_cuidados
+#  Grupo#7_Los_Olvidados
+# Gestion_de_residentes_y_cuidados_y
+# Asignacion_de_turnos_de_cuidadores
+# CASA_HOGAR_SAN_RAMON_LA_PAZ
 # DESCRIPCION DEL PROYECTO.
 # PROBLEMA 
 se identificado un problema en el albergue como el hogar de san Ramon la informacion de los residentes y turnos del personal se manejan de forma manual

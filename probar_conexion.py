@@ -4,7 +4,7 @@ con = mysql.connector.connect(
     host="localhost",
     port=3306,
     user="root",
-    password="d13960315",
+    password="*********",
     database="hogar_san_ramon")
 print("Conectado a MySQL")
 

@@ -4,8 +4,8 @@ utlizando MySQL Workbench creamos la base de datos para el hogar san ramon des p
 eran cuidados, personal, turno, usuario, residente y asistencia con claramente con sus respectivos atributos y las claves foranias creando asi ya la base de datos
 |tablas       |atributos                                      |
 |-------------|-----------------------------------------------|
-| cuidado     | id_cuidado,descripcion,horario,id_personal,   |
-|             | id_residente                                  |  
+| cuidado     | id_cuidado,descripcion,horario,id_personal,   
+|              id_residente                                  |  
 | personal    | id_personal,nombre,apellidos,cargo,telefoono  |
 | turno       | id_turno,fecha;hora,id_personal,id_asitencia  |
 | usuario     | id_usuario,nombre,contraseña,rol,estado       |

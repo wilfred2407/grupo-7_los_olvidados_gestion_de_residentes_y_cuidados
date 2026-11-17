@@ -15,7 +15,7 @@ eran cuidados, personal, turno, usuario, residente y asistencia con claramente c
 # 13-11-2026
 
 ya despues de crear la base de datos lo normalizamos con las 3 normas primero lo convertimos en valores atomicos sin grupos repetivos y
-con clave primaria y algunas correciones que isismos despues isimos que cada tabla tenga una llave primaria y quitamos los atributos que
+con clave primaria y algunas correcciones que se realizo después hicimos que cada tabla tenga una llave primaria y quitamos los atributos que
 dependen de otro atributo y no directamente de la clave primaria y al implmentar las normas nos dio el resultado de 10 tablas y son :
 |tablas       |atributos                                                                        |
 |-------------|---------------------------------------------------------------------------------|
@@ -49,7 +49,7 @@ for tabla in cur.fetchall():
     print(tabla[0])
 
 con.close()
-ya al realizar la vinculacion isismos ultimos arreglos del codigo
+ya al realizar la vinculación realizamos los últimos arreglos del código
 # 15-11-2026
-ya al terminar de arreglar algubnos errores isismo las ventanas con python tkinter y MySQL la primera ventana con 5 cajas para escribir
-(carnet, nombre, appelidos, fecha de nacimiento y numer de habitacion) y un boton guardar 
+ya al terminar de arreglar algunos errores se hizo las ventanas con Python Ttinker y MySQL la primera ventana con 5 cajas para escribir
+(carnet, nombre, apellidos, fecha de nacimiento y numero de habitación) y un botón para guardar.

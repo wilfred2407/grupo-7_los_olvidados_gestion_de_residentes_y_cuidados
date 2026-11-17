@@ -12,7 +12,7 @@ eran cuidados, personal, turno, usuario, residente y asistencia con claramente c
 | asistencia  | id_asistencia,fecha,hora_ingreso,hora_salida,id_personal                             |
 
 
-#13-11-2026
+# 13-11-2026
 
 ya despues de crear la base de datos lo normalizamos con las 3 normas primero lo convertimos en valores atomicos sin grupos repetivos y
 con clave primaria y algunas correciones que isismos despues isimos que cada tabla tenga una llave primaria y quitamos los atributos que
@@ -31,7 +31,7 @@ dependen de otro atributo y no directamente de la clave primaria y al implmentar
 | habitacion       | PK id_habitacion,numero                                                    |
 
 
-#14-11-2026
+# 14-11-2026
 ya este dia vinculamos el MySQL Workbench con python mediante el siguinte comando:
 import mysql.connector
 
@@ -50,6 +50,6 @@ for tabla in cur.fetchall():
 
 con.close()
 ya al realizar la vinculacion isismos ultimos arreglos del codigo
-#15-11-2026
+# 15-11-2026
 ya al terminar de arreglar algubnos errores isismo las ventanas con python tkinter y MySQL la primera ventana con 5 cajas para escribir
 (carnet, nombre, appelidos, fecha de nacimiento y numer de habitacion) y un boton guardar 

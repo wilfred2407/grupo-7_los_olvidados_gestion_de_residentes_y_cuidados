@@ -4,7 +4,6 @@ from tkinter import messagebox
 from datetime import datetime
 import mysql.connector
 
-# conexion a MySQL (cambia TU_CONTRASEÑA por tu contraseña)
 con = mysql.connector.connect(host="localhost", user="root",
                               password="patito123", database="hogar_san_ramon")
 cursor = con.cursor()

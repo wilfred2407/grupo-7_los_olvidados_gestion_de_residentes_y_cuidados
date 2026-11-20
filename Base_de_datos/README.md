@@ -25,32 +25,21 @@ primero isismo la base de datos con myslq con las tablas y sus respectivos atrib
 
 segundo isismos las librerías que nsecitas y lo conectamos y las librerías que utilizamos son 
 
-| Línea | Código | Qué hace |
-|:---:|---|---|
-| 1 | `# Registrar residente - Hogar San Ramón` | Es un comentario. Lo que empieza con `#` Python no lo ejecuta, es solo una nota. |
-| 2 | `import tkinter as tk` | Trae tkinter, la librería para hacer ventanas. "as tk" es un apodo para escribir menos. |
-| 3 | `from tkinter import messagebox` | Trae messagebox, que sirve para mostrar las ventanitas de mensaje (éxito o error). |
-| 4 | `from datetime import datetime` | Trae lo necesario para revisar si una fecha está bien escrita. |
-| 5 | `import mysql.connector` | Trae la librería que conecta Python con MySQL. |
-
+| Código | Qué hace |
+|---|---|
+| `# Registrar residente - Hogar San Ramón` | Es un comentario. Lo que empieza con `#` Python no lo ejecuta, es solo una nota. |
+| `import tkinter as tk` | Trae tkinter, la librería para hacer ventanas. "as tk" es un apodo para escribir menos. |
+| `from tkinter import messagebox` | Trae messagebox, que sirve para mostrar las ventanitas de mensaje (éxito o error). |
+| `from datetime import datetime` | Trae lo necesario para revisar si una fecha está bien escrita. |
+| `import mysql.connector` | Trae la librería que conecta Python con MySQL. |
 
 tercero hay que hacerla vinculacion de mysql con python mediante el siquiente comando :
 import mysql.connector
 
-con = mysql.connector.connect(
-    host="localhost",
-    port=3306,
-    user="root",
-    password="d13960315",
-    database="hogar_san_ramon")
-print("Conectado a MySQL")
-
-cur = con.cursor()
-cur.execute("SHOW TABLES")
-for tabla in cur.fetchall():
-    print(tabla[0])
-
-con.close()
+| Código | Qué hace |
+|---|---|
+| `con = mysql.connector.connect(`<br>`host="localhost", user="root",`<br>`password="...",`<br>`database="hogar_san_ramon")` | Se conecta a MySQL y guarda la conexión en la variable `con`.<br><br>`host="localhost"`: MySQL está en esta misma computadora.<br>`user="root"`: el usuario administrador de MySQL.<br>`password`: su contraseña.<br>`database`: la base de datos que usamos. |
+| `cursor = con.cursor()` | Crea el cursor. Es como un mensajero: lleva las órdenes (SQL) a MySQL y trae las respuestas. |
 
 
 cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio 5 cajas para escribir (carnet,nombres,apellidos,fecha de nacimiento y numero de habitacion) y un boton de guardar 

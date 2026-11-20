@@ -106,19 +106,6 @@ segundo realizamos es buscar las librerías y lo conectamos y lo vinculamos con 
 | `from datetime import datetime` | Trae lo necesario para revisar si una fecha está bien escrita. |
 | `import mysql.connector` | Trae la librería que conecta Python con MySQL. |
 
-tercero hay que hacerla vinculacion de mysql con python mediante el siquiente comando :
-import mysql.connector
-
-| Código | Qué hace |
-|---|---|
-| `con = mysql.connector.connect(`<br>`host="localhost", user="root",`<br>`password="...",`<br>`database="hogar_san_ramon")` | Se conecta a MySQL y guarda la conexión en la variable `con`.<br><br>`host="sql10.freesqldatabase.com"`: MySQL está en esta misma computadora.<br>`user="sql10841006"`: el usuario administrador de MySQL.<br>`password`: mymKMsTsga .<br>`database`: sql10841006. |
-| `cursor = con.cursor()` | Crea el cursor. Es como un mensajero: lleva las órdenes (SQL) a MySQL y trae las respuestas. |
-
-
-cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio 5 cajas para escribir (carnet,nombres,apellidos,fecha de nacimiento y numero de habitacion) y un boton de guardar 
-el prototipo revisa si los datos esta bien los guarda en la base de datos y muestra un mensaje de exito
-
-
 TUTORIAL: INSTALACIÓN DE LIBRERÍAS EN VISUAL STUDIO CODE
 
 ## 1. Instalación de Python
@@ -260,4 +247,15 @@ cursor = con.cursor()
 
 *Paso 7:* Ejecutar el programa y comprobar que la conexión con MySQL funcione correctamente
 
+tercero hay que hacerla vinculacion de mysql con python mediante el siquiente comando :
+import mysql.connector
+
+| Código | Qué hace |
+|---|---|
+| `con = mysql.connector.connect(`<br>`host="localhost", user="root",`<br>`password="...",`<br>`database="hogar_san_ramon")` | Se conecta a MySQL y guarda la conexión en la variable `con`.<br><br>`host="sql10.freesqldatabase.com"`: MySQL está en esta misma computadora.<br>`user="sql10841006"`: el usuario administrador de MySQL.<br>`password`: mymKMsTsga .<br>`database`: sql10841006. |
+| `cursor = con.cursor()` | Crea el cursor. Es como un mensajero: lleva las órdenes (SQL) a MySQL y trae las respuestas. |
+
+
+cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio 5 cajas para escribir (carnet,nombres,apellidos,fecha de nacimiento y numero de habitacion) y un boton de guardar 
+el prototipo revisa si los datos esta bien los guarda en la base de datos y muestra un mensaje de exito
 

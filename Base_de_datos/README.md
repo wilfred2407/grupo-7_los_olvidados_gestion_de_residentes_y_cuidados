@@ -46,7 +46,7 @@ el prototipo revisa si los datos esta bien los guarda en la base de datos y mues
 
 # TUTORIAL
 
-PASO 1: ABRIR MySQL WORKBENCH
+PASO 1: ABRIR MySQL WORKBENCH DEL ENLACE DE `https://github.com/wilfred2407/grupo-7_los_olvidados_gestion_de_residentes_y_cuidados/blob/f4a2166a03fb4481210563706cad24a825da7b73/Base_de_datos/MySQL_grupo7%20corregido.sql`
 
 PASO 2: EN LÑA PANTALLA PRINCIPAL ENCONTRARAS UNA CONEXCION LLAMADA `Local instance MySQL`
 
@@ -78,13 +78,36 @@ PASO 9: ANTES DE CREAR CADA TABLA SE ESCRIBE `CREATE TABLE`
 
 PASO 10: EJECUTAR EL CODIGO SQL
 
+PASO 11: YA CON TODO DIHO Y ECHO PRECIONAMOS Ctrl + A para seleccionar el codigo
+
+paso 12: BUSCA EL BOTON CON SIMBOLO DE RAYO QUE CORRESPONDE A EJECUTAR
+
+paso 13: HAZ CLICK PARA EJECUTAR TODAS LAS INSTRUCCIONES SELECCIONADAS
+
+PASO 14: ESPERA UNOS SEGUNDOS MIENTRAS MySQL PROCESA EL CODIGO
+
+PASO 15: COMPROBAR SI SE CREO LA BASE DE DATOS   
+
+PASO 17: COMPROBAR QUE SE CREARON LAS 6 TABLAS   
+
+PASO 18: COMPROBAR LA ESTRUCTURA DE LA TABLA     
 
 
-PASO : COMPROBAR SI SE CREO LA BASE DE DATOS   
+Para comprobar que las columnas se hayan creado correctamente, ejecuta los siguientes comandos SQL
 
-PASO : COMPROBAR QUE SE CREARON LAS 6 TABLAS   
+DESCRIBE usuarios;
 
-PASO : COMPROBAR LA ESTRUCTURA DE LA TABLA     
+DESCRIBE personal;
+
+DESCRIBE residente;
+
+DESCRIBE cuidados;
+
+DESCRIBE turno;
+
+DESCRIBE asistencia;
+
+Cada comando mostrará las columnas de una tabla, su tipo de dato y si acepta valores nulos
 
 PASO : INSERTAR DATOS DE PRUEBA                
 

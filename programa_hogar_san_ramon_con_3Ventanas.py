@@ -367,11 +367,10 @@ ventana_login.title("Hogar San Ramón")
 ventana_login.geometry("900x600")
 ventana_login.configure(bg="#F4F4F4")
 
-# Contenedor central para mantener todo alineado en el medio de la pantalla
 contenedor = tk.Frame(ventana_login, bg="#F4F4F4")
 contenedor.place(relx=0.5, rely=0.5, anchor="center")
 
-# Título principal y subtítulo
+# Títulos principal y subtítulo
 tk.Label(
     contenedor,
     text="Hogar San Ramón",
@@ -388,7 +387,6 @@ tk.Label(
     fg="#666666"
 ).pack(pady=(0, 25))
 
-# Campo Usuario (etiqueta arriba, caja abajo)
 tk.Label(
     contenedor,
     text="Usuario",

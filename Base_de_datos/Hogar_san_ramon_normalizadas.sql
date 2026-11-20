@@ -27,9 +27,11 @@ nombre_cargo varchar (25) not null unique
 -- ----------------- TABLA 3: habitacion -----------------
 create table habitacion (
 id_habitacion int primary key auto_increment,
-numero int not null unique
+numero int not null unique,
+CONSTRAINT chk_habitacion_numero
+CHECK (numero > 0)
 );
--- - - el numero de habitacion es unico, no puede haber dos habitaciones con el mismo numero
+-- - - el numero de habitacion es unico, no puede haber dos habitaciones con el mismo número y debe ser mayor a cero
 
 -- ----------------- TABLA 4: personal -----------------
 create table personal (
@@ -52,7 +54,10 @@ estado varchar (10) not null,
 id_rol int not null,
 id_personal int not null unique,
 foreign key (id_rol) references rol (id_rol),
-foreign key (id_personal) references personal (id_personal)
+foreign key (id_personal) references personal (id_personal), 
+CONSTRAINT chk_usuario_estado
+CHECK (estado IN ('activo', 
+'inactivo'))
 );
 -- - - 64 en contrasena porque se guarda encriptada con sha2 (la encriptacion ocupa 64 caracteres)
 -- - - estado es "activo" o "inactivo", por eso 10
@@ -78,10 +83,14 @@ descripcion varchar (200) not null,
 fecha_inicio date not null,
 fecha_fin date null,
 id_residente int not null,
-foreign key (id_residente) references residente (id_residente)
+foreign key (id_residente) references residente (id_residente),
+CONSTRAINT chk_fechas_plan
+CHECK (fecha_fin IS NULL OR fecha_fin 
+>= fecha_inicio)
 );
 -- - - un residente puede tener varios planes de atencion con el tiempo (relacion 1 a muchos)
 -- - - fecha_fin puede quedar vacia si el plan todavia sigue vigente
+-- - - si se registra una fecha de finalizacion, no puede ser anterior a la fecha de inicio
 
 -- ----------------- TABLA 8: cuidado -----------------
 create table cuidado (
@@ -104,9 +113,11 @@ hora_inicio time not null,
 hora_fin time not null,
 id_personal int not null,
 foreign key (id_personal) references personal (id_personal),
-unique (id_personal, fecha, hora_inicio)
+unique (id_personal, fecha, hora_inicio), 
+CONSTRAINT chk_horas_turno
+CHECK (hora_inicio <> hora_fin)
 );
--- - - la misma persona no puede tener dos turnos que empiecen el mismo dia a la misma hora
+-- - - la misma persona no puede tener dos turnos que empiecen el mismo dia a la misma hora y la hora de inicio debe ser diferente de la hora de finalizacion
 
 -- ----------------- TABLA 10: asistencia -----------------
 create table asistencia (

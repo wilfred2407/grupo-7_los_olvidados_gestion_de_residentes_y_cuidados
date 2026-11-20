@@ -46,17 +46,39 @@ el prototipo revisa si los datos esta bien los guarda en la base de datos y mues
 
 # TUTORIAL
 
-# PASO : 
+PASO 1: ABRIR MySQL WORKBENCH
 
-ABRIR MySQL WORKBENCH                   
+PASO 2: EN LÑA PANTALLA PRINCIPAL ENCONTRARAS UNA CONEXCION LLAMADA `Local instance MySQL`
 
-# PASO : CREAR UNA NUEVA CONSULTA SQL            
+PASO 3: DARLE CLICK A ESA CONEXCION
 
-PASO : COPIAR Y PEGAR EL CODIGO SQL            
+PASO 4: CREAR UNA NUEVA CONSULTA SQL
 
-PASO : CREAR 6 TABLAS                          
+PASO 5: UNA VEZ DENTRO DE MySQL BUSCAR LA OPCION |FILE| Y 
 
-PASO : EJECUTAR EL CODIGO SQL                  
+PASO 6: SELECCIONA |New Query Tab|
+
+PASO 7: SE CREARA UNA HOJA EN BLANCO AHI ESCRIBIMOS NUESTRO CODIGO SQL
+
+PASO 8: CREAR LAS 6 TABLAS QUE SON:
+
+usuarios: almacena los nombres de usuario, contraseñas, roles y estados.
+
+personal: almacena los datos de los trabajadores del hogar.
+
+residente: almacena la información de las personas que viven en el hogar.
+
+cuidados: registra los cuidados que necesita cada residente.
+
+turno: registra los turnos asignados al personal.
+
+asistencia: registra la hora de ingreso y salida del personal.
+
+PASO 9: ANTES DE CREAR CADA TABLA SE ESCRIBE `CREATE TABLE`
+
+PASO 10: EJECUTAR EL CODIGO SQL
+
+
 
 PASO : COMPROBAR SI SE CREO LA BASE DE DATOS   
 

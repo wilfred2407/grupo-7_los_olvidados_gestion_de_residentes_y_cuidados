@@ -46,6 +46,7 @@ el prototipo revisa si los datos esta bien los guarda en la base de datos y mues
 
 # TUTORIAL
 |-------|-----------------------------------------|
+
 |PASO 1:| ABRIR MySQL WORKBENCH                   |
 
 |PASO 2:| CREAR UNA NUEVA CONSULTA SQL            |

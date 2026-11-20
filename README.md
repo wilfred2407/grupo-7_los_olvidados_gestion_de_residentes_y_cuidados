@@ -119,3 +119,145 @@ cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio
 el prototipo revisa si los datos esta bien los guarda en la base de datos y muestra un mensaje de exito
 
 
+TUTORIAL: INSTALACIÓN DE LIBRERÍAS EN VISUAL STUDIO CODE
+
+## 1. Instalación de Python
+
+*Paso 1:* Ingresar a la página oficial https://www.python.org/downloads/
+
+*Paso 2:* Descargar Python para Windows.
+
+*Paso 3:* Ejecutar el instalador y marcar la opción Add Python to PATH.
+
+*Paso 4:* Presionar Install Now y esperar a que termine la instalación.
+
+*Paso 5:* Abrir Visual Studio Code y seleccionar Terminal → New Terminal.
+
+*Paso 6:* Escribir el comando para comprobar la instalación:
+
+bash
+python --version
+
+
+## 2. Instalación de la extensión Python
+
+*Paso 1:* Abrir Visual Studio Code.
+
+*Paso 2:* Ingresar a la sección de extensiones.
+
+*Paso 3:* Buscar Python en el buscador.
+
+*Paso 4:* Seleccionar la extensión desarrollada por Microsoft.
+
+*Paso 5:* Presionar Install.
+
+## 3. Librería Tkinter
+
+*Paso 1:* Abrir Visual Studio Code.
+
+*Paso 2:* Crear un archivo con extensión .py.
+
+*Paso 3:* Escribir el siguiente código:
+
+python
+import tkinter as tk
+
+
+*Paso 4:* Ejecutar el archivo para comprobar que la librería funciona.
+
+*Paso 5:* Verificar que se pueda crear una ventana. Esta librería normalmente ya viene incluida con Python.
+
+## 4. Librería Messagebox
+
+*Paso 1:* Abrir el archivo de Python del proyecto.
+
+*Paso 2:* Escribir el siguiente código:
+
+python
+from tkinter import import messagebox
+
+
+*Paso 3:* Utilizar la instrucción para mostrar un mensaje:
+
+python
+messagebox.showinfo("Aviso", "Instalación correcta")
+
+
+*Paso 4:* Ejecutar el programa y comprobar que aparezca la ventana del mensaje.
+
+*Paso 5:* Verificar que funcione correctamente. No necesita instalación adicional porque forma parte de Tkinter.
+
+## 5. Librería Datetime
+
+*Paso 1:* Abrir el archivo de Python.
+
+*Paso 2:* Escribir el siguiente código:
+
+python
+from datetime import datetime
+
+
+*Paso 3:* Crear una variable para almacenar una fecha.
+
+*Paso 4:* Utilizar datetime.strptime() para comprobar el formato de la fecha.
+
+*Paso 5:* Ejecutar el programa y verificar que no aparezcan errores. Esta librería ya viene incluida con Python.
+
+## 6. Instalación de MySQL Connector
+
+*Paso 1:* Abrir Visual Studio Code.
+
+*Paso 2:* Ingresar a Terminal → New Terminal.
+
+*Paso 3:* Escribir el siguiente comando:
+
+bash
+python -m pip install mysql-connector-python
+
+
+*Paso 4:* Presionar Enter y esperar a que termine la instalación.
+
+*Paso 5:* Crear o abrir un archivo de Python.
+
+*Paso 6:* Escribir el siguiente código:
+
+python
+import mysql.connector
+
+
+*Paso 7:* Ejecutar el archivo para comprobar que la librería se importó correctamente.
+
+## 7. Conexión de Python con MySQL
+
+*Paso 1:* Abrir el archivo de Python del proyecto.
+
+*Paso 2:* Importar la librería:
+
+python
+import mysql.connector
+
+
+*Paso 3:* Escribir la instrucción para establecer la conexión:
+
+python
+con = mysql.connector.connect(
+    host="DIRECCION_DEL_SERVIDOR",
+    user="USUARIO",
+    password="CONTRASEÑA",
+    database="NOMBRE_DE_LA_BASE_DE_DATOS"
+)
+
+
+*Paso 4:* Colocar los datos correspondientes del servidor MySQL.
+
+*Paso 5:* Guardar la conexión en una variable llamada con.
+
+*Paso 6:* Crear el cursor mediante el siguiente código:
+
+python
+cursor = con.cursor()
+
+
+*Paso 7:* Ejecutar el programa y comprobar que la conexión con MySQL funcione correctamente
+
+

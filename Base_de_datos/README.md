@@ -46,7 +46,7 @@ el prototipo revisa si los datos esta bien los guarda en la base de datos y mues
 
 # TUTORIAL
 
-PASO 1: ABRIR MySQL WORKBENCH DEL SIGUIENTE ENLACE `https://github.com/wilfred2407/grupo-7_los_olvidados_gestion_de_residentes_y_cuidados/blob/f4a2166a03fb4481210563706cad24a825da7b73/Base_de_datos/MySQL_grupo7%20corregido.sql`
+PASO 1: ABRIR MySQL WORKBENCH
 
 PASO 2: EN LÑA PANTALLA PRINCIPAL ENCONTRARAS UNA CONEXCION LLAMADA `Local instance MySQL`
 
@@ -109,16 +109,18 @@ DESCRIBE asistencia;
 
 Cada comando mostrará las columnas de una tabla, su tipo de dato y si acepta valores nulos
 
-PASO : INSERTAR DATOS DE PRUEBA                
+PASO 19: INSERTAR DATOS DE PRUEBA                
 
-PASO : CONSULTA LO DATOS GUARDADOS            
+PASO 20: CONSULTA LO DATOS GUARDADOS            
 
-PASO : INSERTAR UN CUIDADO PARA UN RESIDENTE  
+PASO 21: INSERTAR UN CUIDADO PARA UN RESIDENTE  
 
-PASO : REGISTRAR UN TURNO                     
+PASO 22: REGISTRAR UN TURNO                     
 
-PASO : REGISTRAR LA ASISTENCIA                
+PASO 23: REGISTRAR LA ASISTENCIA                
 
-PASO : VERIFICAR QUE TODO FUNCIONA            
+PASO 24: VERIFICAR QUE TODO FUNCIONA            
 
-PASO : INICIAR PROGRAMA
+PASO 25: INICIAR PROGRAMA
+
+PASO 26: TODO ESO YA SE GUARDA EN UN ENLACE SIGUIENTE `https://github.com/wilfred2407/grupo-7_los_olvidados_gestion_de_residentes_y_cuidados/blob/f4a2166a03fb4481210563706cad24a825da7b73/Base_de_datos/MySQL_grupo7%20corregido.sql`

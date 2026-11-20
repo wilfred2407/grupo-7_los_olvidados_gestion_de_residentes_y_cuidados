@@ -45,7 +45,6 @@ cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio
 el prototipo revisa si los datos esta bien los guarda en la base de datos y muestra un mensaje de exito
 
 # TUTORIAL
-|-------|-----------------------------------------|
 
 |PASO 1:| ABRIR MySQL WORKBENCH                   |
 

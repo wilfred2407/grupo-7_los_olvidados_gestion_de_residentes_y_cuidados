@@ -46,18 +46,18 @@ el prototipo revisa si los datos esta bien los guarda en la base de datos y mues
 
 # TUTORIAL
 |------------------------------------------------|
-|PASO 1: ABRIR MySQL WORKBENCH                   |
-|PASO 2: CREAR UNA NUEVA CONSULTA SQL            |
-|PASO 3: COPIAR Y PEGAR EL CODIGO SQL            |
-|PASO 4: CREAR 6 TABLAS                          |
-|PASO 5: EJECUTAR EL CODIGO SQL                  |
-|PASO 6: COMPROBAR SI SE CREO LA BASE DE DATOS   |
-|PASO 7: COMPROBAR QUE SE CREARON LAS 6 TABLAS   |
-|PASO 8: COMPROBAR LA ESTRUCTURA DE LA TABLA     |
-|PASO 9: INSERTAR DATOS DE PRUEBA                |
-|PASO 10: CONSULTA LO DATOS GUARDADOS            |
-|PASO 11: INSERTAR UN CUIDADO PARA UN RESIDENTE  |
-|PASO 12: REGISTRAR UN TURNO                     |
-|PASO 13: REGISTRAR LA ASISTENCIA                |
-|PASO 14: VERIFICAR QUE TODO FUNCIONA            |
-|PASO 15: INICIAR PROGRAMA                       |
+|PASO 1:| ABRIR MySQL WORKBENCH                   |
+|PASO 2:| CREAR UNA NUEVA CONSULTA SQL            |
+|PASO 3:| COPIAR Y PEGAR EL CODIGO SQL            |
+|PASO 4:| CREAR 6 TABLAS                          |
+|PASO 5:| EJECUTAR EL CODIGO SQL                  |
+|PASO 6:| COMPROBAR SI SE CREO LA BASE DE DATOS   |
+|PASO 7:| COMPROBAR QUE SE CREARON LAS 6 TABLAS   |
+|PASO 8:| COMPROBAR LA ESTRUCTURA DE LA TABLA     |
+|PASO 9:| INSERTAR DATOS DE PRUEBA                |
+|PASO 10:| CONSULTA LO DATOS GUARDADOS            |
+|PASO 11:| INSERTAR UN CUIDADO PARA UN RESIDENTE  |
+|PASO 12:| REGISTRAR UN TURNO                     |
+|PASO 13:| REGISTRAR LA ASISTENCIA                |
+|PASO 14:| VERIFICAR QUE TODO FUNCIONA            |
+|PASO 15:| INICIAR PROGRAMA                       |

@@ -27,7 +27,9 @@ nombre_cargo varchar (25) not null unique
 -- ----------------- TABLA 3: habitacion -----------------
 create table habitacion (
 id_habitacion int primary key auto_increment,
-numero int not null unique
+numero int not null unique,
+CONSTRAINT chk_habitacion_numero
+CHECK (numero > 0)
 );
 -- - - el numero de habitacion es unico, no puede haber dos habitaciones con el mismo numero
 

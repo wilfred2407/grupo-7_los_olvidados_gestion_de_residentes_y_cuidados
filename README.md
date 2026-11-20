@@ -255,6 +255,72 @@ import mysql.connector
 | `con = mysql.connector.connect(`<br>`host="localhost", user="root",`<br>`password="...",`<br>`database="hogar_san_ramon")` | Se conecta a MySQL y guarda la conexión en la variable `con`.<br><br>`host="sql10.freesqldatabase.com"`: MySQL está en esta misma computadora.<br>`user="sql10841006"`: el usuario administrador de MySQL.<br>`password`: mymKMsTsga .<br>`database`: sql10841006. |
 | `cursor = con.cursor()` | Crea el cursor. Es como un mensajero: lleva las órdenes (SQL) a MySQL y trae las respuestas. |
 
+# TUTORIAL: CONEXIÓN DE PYTHON CON MYSQL Y CREACIÓN DE INTERFAZ
+
+## 1. Conexión de Python con MySQL
+
+**Paso 1:** Abrir el archivo de Python del proyecto.
+
+**Paso 2:** Importar la librería:
+
+\`\`\`python
+import mysql.connector
+\`\`\`
+
+**Paso 3:** Escribir la instrucción para establecer la conexión:
+
+\`\`\`python
+con = mysql.connector.connect(
+    host="sql10.freesqldatabase.com",
+    user="sql10841006",
+    password="CONTRASEÑA",
+    database="sql10841006"
+)
+\`\`\`
+
+**Paso 4:** Colocar los datos correspondientes del servidor MySQL.
+
+**Paso 5:** Guardar la conexión en una variable llamada `con`.
+
+**Paso 6:** Crear el cursor mediante el siguiente código:
+
+\`\`\`python
+cursor = con.cursor()
+\`\`\`
+
+**Paso 7:** Ejecutar el programa y comprobar que la conexión con MySQL funcione correctamente.
+
+## 2. Creación de la interfaz con Tkinter
+
+**Paso 1:** Abrir el archivo de Python del proyecto.
+
+**Paso 2:** Importar la librería Tkinter mediante el siguiente código:
+
+\`\`\`python
+import tkinter as tk
+\`\`\`
+
+**Paso 3:** Crear la ventana principal del programa.
+
+**Paso 4:** Crear cinco cajas de texto para escribir los datos correspondientes (carnet, nombres, apellidos, fecha de nacimiento y número de habitación).
+
+**Paso 5:** Agregar etiquetas para identificar cada una de las cajas de texto.
+
+**Paso 6:** Crear un botón para guardar los datos ingresados.
+
+**Paso 7:** Ejecutar el programa y comprobar que la interfaz gráfica se muestre correctamente.
+
+## 3. Guardar los datos en la base de datos
+
+**Paso 1:** Ingresar los datos correspondientes en las cinco cajas de texto de la interfaz.
+
+**Paso 2:** Presionar el botón Guardar para registrar los datos.
+
+**Paso 3:** Verificar que los datos ingresados estén correctamente registrados en la base de datos.
+
+**Paso 4:** Mostrar un mensaje de éxito cuando los datos se hayan guardado correctamente.
+
+**Paso 5:** Ejecutar el programa y comprobar que los datos se guarden en MySQL y que aparezca el mensaje de éxito.
 
 cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio 5 cajas para escribir (carnet,nombres,apellidos,fecha de nacimiento y numero de habitacion) y un boton de guardar 
 el prototipo revisa si los datos esta bien los guarda en la base de datos y muestra un mensaje de exito

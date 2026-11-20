@@ -21,7 +21,6 @@ def conectar():
 
 
 def ejecutar(sql, datos=(), leer=False):
-    # abre la conexion, ejecuta la consulta y la cierra
     db = conectar()
     try:
         cur = db.cursor()
@@ -87,7 +86,7 @@ def validar_cuidado(ci, descripcion, horario):
     return None
 
 
-# ---------------------- FUNCIONES PARA LA INTERFAZ ----------------------
+# ---------------------- FUNCIONES PARA LA INTERFAZ GRAFICA ----------------------
 def crear_pestana(cuaderno, titulo, campos, columnas):
     marco = tk.Frame(cuaderno, padx=10, pady=10)
     cuaderno.add(marco, text=titulo)
@@ -154,7 +153,7 @@ def abrir_principal(id_personal):
     ventana = tk.Tk()
     ventana.title("Hogar San Ramón")
     cuaderno = ttk.Notebook(ventana)
-    cuaderno.pack(padx=10, pady=10)
+    cuaderno.pack(padx=20, pady=20)
 
     sel = {"res": None, "cui": None}     
     datos_res = {}
@@ -364,16 +363,63 @@ def abrir_principal(id_personal):
 
 # ---------------------- VENTANA DE LOGIN ----------------------
 ventana_login = tk.Tk()
-ventana_login.title("Login")
+ventana_login.title("Hogar San Ramón")
+ventana_login.geometry("900x600")
+ventana_login.configure(bg="#F4F4F4")
 
-tk.Label(ventana_login, text="Usuario").grid(row=0, column=0, padx=10, pady=5)
-entry_user = tk.Entry(ventana_login)
-entry_user.grid(row=0, column=1, padx=10)
+# Contenedor central para mantener todo alineado en el medio de la pantalla
+contenedor = tk.Frame(ventana_login, bg="#F4F4F4")
+contenedor.place(relx=0.5, rely=0.5, anchor="center")
 
-tk.Label(ventana_login, text="Contraseña").grid(row=1, column=0, padx=10, pady=5)
-entry_pass = tk.Entry(ventana_login, show="*")
-entry_pass.grid(row=1, column=1, padx=10)
+# Título principal y subtítulo
+tk.Label(
+    contenedor,
+    text="Hogar San Ramón",
+    font=("Segoe UI", 24),
+    bg="#F4F4F4",
+    fg="#222222"
+).pack(pady=(0, 2))
 
-tk.Button(ventana_login, text="Ingresar", command=login).grid(row=2, column=0, columnspan=2, pady=10)
+tk.Label(
+    contenedor,
+    text="Casa de albergue de abuelitos y abuelitas",
+    font=("Segoe UI", 15),
+    bg="#F4F4F4",
+    fg="#666666"
+).pack(pady=(0, 25))
+
+# Campo Usuario (etiqueta arriba, caja abajo)
+tk.Label(
+    contenedor,
+    text="Usuario",
+    font=("Segoe UI", 10),
+    bg="#F4F4F4",
+    fg="#444444",
+    anchor="w"
+).pack(fill="x", pady=(0, 4))
+
+entry_user = ttk.Entry(contenedor, width=38, font=("Segoe UI", 11))
+entry_user.pack(ipady=3)
+
+# Campo Contraseña (etiqueta arriba, caja abajo)
+tk.Label(
+    contenedor,
+    text="Contraseña",
+    font=("Segoe UI", 10),
+    bg="#F4F4F4",
+    fg="#444444",
+    anchor="w"
+).pack(fill="x", pady=(14, 4))
+
+entry_pass = ttk.Entry(contenedor, width=38, font=("Segoe UI", 11), show="*")
+entry_pass.pack(ipady=3)
+
+# Botón Ingresar centrado
+ttk.Button(
+    contenedor,
+    text="Ingresar",
+    command=login
+).pack(pady=(22, 0), ipadx=14, ipady=4)
+
 
 ventana_login.mainloop()

@@ -88,6 +88,7 @@ apellidos varchar (30) not null,
 fecha_nac date not null,
 id_habitacion int not null,
 foreign key (id_habitacion) references habitacion (id_habitacion),
+CONSTRAINT chk_residente_ci CHECK (ci_residente REGEXP '^[0-9]{6,8}[A-Za-z0-9]{0,3}$'),
 CONSTRAINT chk_residente_nombres_largo CHECK (CHAR_LENGTH(TRIM(nombres)) >= 3),
 CONSTRAINT chk_residente_apellidos_largo CHECK (CHAR_LENGTH(TRIM(apellidos)) >= 3),
 CONSTRAINT chk_residente_fecha_nac CHECK (fecha_nac < '2000-01-01')
@@ -148,6 +149,15 @@ foreign key (id_turno) references turno (id_turno)
 );
 -- cada asistencia pertenece a un turno (relacion 1 a 1)
 -- hora_salida puede quedar vacia hasta que la persona termine su turno
+
+USE sql10841006;
+insert into rol (nombre_rol) values ('administrador');
+insert into cargo (nombre_cargo) values ('Administrador');
+insert into habitacion (numero) values (1),(2),(3),(4),(5),(6),(7),(8),(9),(10);
+insert into personal (nombres, apellidos, telefono, id_cargo)
+values ('Admin', 'Sistema', '70000000', 1);
+insert into usuario (nombre_usuario, contrasena, estado, id_rol, id_personal)
+values ('admin', sha2('admin1234', 256), 'activo', 1, 1);
 
 -- ----------------- CONSULTAS DE PRUEBA -----------------
 select * from cuidado;

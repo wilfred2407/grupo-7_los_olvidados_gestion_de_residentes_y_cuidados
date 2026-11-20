@@ -48,7 +48,7 @@ el prototipo revisa si los datos esta bien los guarda en la base de datos y mues
 
 PASO 1: ABRIR MySQL WORKBENCH
 
-PASO 2: EN LÑA PANTALLA PRINCIPAL ENCONTRARAS UNA CONEXCION LLAMADA `Local instance MySQL`
+PASO 2: EN LA PANTALLA PRINCIPAL ENCONTRARAS UNA CONEXCION LLAMADA `Local instance MySQL`
 
 PASO 3: DARLE CLICK A ESA CONEXCION
 

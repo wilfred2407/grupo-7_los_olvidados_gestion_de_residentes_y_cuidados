@@ -6,7 +6,7 @@ requisitos:
 -MYSQL WORKBENCH 8.0 CE
 -libreria tkinder
 -visual studios code
-primero isismo la base de datos con myslq con las tablas y sus respectivos atributos y lo normalizamos
+primero que realizamos la base de datos con myslq con las tablas y sus respectivos atributos y lo normalizamos y podemos ver en la siguiente tabla:
 
 |tablas       |atributos                                                                        |
 |-------------|---------------------------------------------------------------------------------|
@@ -19,11 +19,10 @@ primero isismo la base de datos con myslq con las tablas y sus respectivos atrib
 | asistencia       | PK id_asistencia,hora_ingreso,hora_salida,FK id_turno                      |
 | plan de atencion | PK id_plan,descripcion,fecha_inicio,fecha_fin,FK id_residente              |
 | rol              | PK id_rol,nombre_rol                                                       |
-| habitacion       | PK id_habitacion,numero      
-                                          |
+| habitacion       | PK id_habitacion,numero                                                    |
 
 
-segundo isismos las librerías que nsecitas y lo conectamos y las librerías que utilizamos son 
+segundo realizamos es buscar las librerías y lo conectamos y lo vinculamos con python y podemos ver en la siguiente tabla las librerías que realizamos y que hace son 
 
 | Código | Qué hace |
 |---|---|
@@ -38,7 +37,7 @@ import mysql.connector
 
 | Código | Qué hace |
 |---|---|
-| `con = mysql.connector.connect(`<br>`host="localhost", user="root",`<br>`password="...",`<br>`database="hogar_san_ramon")` | Se conecta a MySQL y guarda la conexión en la variable `con`.<br><br>`host="localhost"`: MySQL está en esta misma computadora.<br>`user="root"`: el usuario administrador de MySQL.<br>`password`: su contraseña.<br>`database`: la base de datos que usamos. |
+| `con = mysql.connector.connect(`<br>`host="localhost", user="root",`<br>`password="...",`<br>`database="hogar_san_ramon")` | Se conecta a MySQL y guarda la conexión en la variable `con`.<br><br>`host="sql10.freesqldatabase.com"`: MySQL está en esta misma computadora.<br>`user="sql10841006"`: el usuario administrador de MySQL.<br>`password`: mymKMsTsga .<br>`database`: sql10841006. |
 | `cursor = con.cursor()` | Crea el cursor. Es como un mensajero: lleva las órdenes (SQL) a MySQL y trae las respuestas. |
 
 

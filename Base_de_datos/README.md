@@ -44,7 +44,7 @@ import mysql.connector
 cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio 5 cajas para escribir (carnet,nombres,apellidos,fecha de nacimiento y numero de habitacion) y un boton de guardar 
 el prototipo revisa si los datos esta bien los guarda en la base de datos y muestra un mensaje de exito
 
-[TUTORIAL]
+# TUTORIAL
 PASO 1: ABRIR MySQL WORKBENCH
 PASO 2: CREAR UNA NUEVA CONSULTA SQL
 PASO 3: COPIAR Y PEGAR EL CODIGO SQL

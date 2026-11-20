@@ -72,7 +72,7 @@ el prototipo revisa si los datos esta bien los guarda en la base de datos y mues
 
 |PASO 13:| REGISTRAR LA ASISTENCIA                
 
-|PASO 14:| VERIFICAR QUE TODO FUNCIONA            |
+|PASO 14:| VERIFICAR QUE TODO FUNCIONA            
 
-|PASO 15:| INICIAR PROGRAMA                       |
+|PASO 15:| INICIAR PROGRAMA                       
 

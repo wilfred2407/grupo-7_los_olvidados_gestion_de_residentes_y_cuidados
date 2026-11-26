@@ -50,9 +50,21 @@ for tabla in cur.fetchall():
 
 con.close()
 ya al realizar la vinculación realizamos los últimos arreglos del código
+
 # 15-11-2026
-ya al terminar de arreglar algunos errores se hizo las ventanas con Python Ttinker y MySQL la primera ventana con 5 cajas para escribir
+ya al terminar de arreglar algunos errores se hizo la ventanas con Python Ttinker y MySQL la primera ventana con 5 cajas para escribir
 (carnet, nombre, apellidos, fecha de nacimiento y numero de habitación) y un botón para guardar al colocar en la cajas los datos se guardan automáticamente y si hay algunos errores hay una ventana dice error 
+
 # 19-11-2026
 el dia de hoy colocamos limitaciones a las ventanas para que coloquen lo indicado en las ventanas y en la base de datos igual colocamos las restricciones para que no haiga ningun inconveniente en la base de datos 
 
+# 20-11-2026
+integramos ventanas nuevas al prototipo una ventana de login que permite entrar solo el administrador pueda ingresar con su usuario y su contraseña y Cuidados que de cada residente se busca por CI con descripción 
+y horario y la ultima ventana es planes de atención de un residente que tiene fecha de inicio y fecha de fin opcional y salio con algunos errores pero lo estamos arreglando
+
+# 22-11-2026
+ al corregirlo y ejecutarlo con éxito asimos las demás ventanas que son 3 y son personal que tiene las cajas de  Nombres, apellidos, teléfono y cargo la siguiente ventana es turnos y lleva las
+cajas de Fecha, hora de inicio, hora de fin y persona asignada y la ultima ventana es asistencia  que tiene las cajas de Hora de ingreso y de salida (opcional) de un turno salió con éxito pero fallo en la restricciones y lo estamos viendo
+
+# 25-11-2026
+e el día de hoy después de realizar las restricciones realizamos la ultimas ventana creo que es el de matematicas que es un análisis de la semana y designacion de turnos 

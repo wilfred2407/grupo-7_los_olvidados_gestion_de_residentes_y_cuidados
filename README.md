@@ -28,9 +28,9 @@ asi adjuntamos la tabla de los integrantes del grupos (integrantes del equipo).
 | 5 | Apolo Omar Vasquez Peralta | Programador. | peraltaomar409-409-cloud |
 
 ## como levantamos la base de datos
-el prototipo se basa en la casa hogar para la administracion de los horarios y los cuidados de los residebtes y vamos explicar como se levanto la base de datos mediante tkinder cada paso y los requisitos que neswcitamos:
-
-requisitos:
+el prototipo se basa en la casa hogar para la administración de los horarios y los cuidados de los residentes y vamos explicar como se levanto la base de datos mediante tkinder
+el prototipo sirve para administrar el albergue san Ramon: cuidados, residentes, plan de atención, personal, turnos, asistencia y usuarios del sistema y analiza la cobertura de
+turnos y repartos de horas del personal y lo que necesitamos para correr el prototipo es :
 
 -python
 
@@ -326,9 +326,19 @@ cuarto creamos el interfaz con tkinder isismo la creacion de ventana y nos salio
 el prototipo revisa si los datos esta bien los guarda en la base de datos y muestra un mensaje de exito
 
 
-## Cómo se usa
+# Hogar San Ramón – Sistema de gestión de residentes y turnos
 
-### Login
+Programa de escritorio hecho en **Python (tkinter)** que se conecta a una base de datos **MySQL**.
+Sirve para administrar un albergue de adultos mayores: residentes, cuidados, planes de atención,
+personal, turnos de mañana/tarde/noche, asistencia y usuarios del sistema. Además incluye una
+pestaña de **Matemáticas** que analiza la cobertura de turnos y el reparto de horas del personal.
+
+Proyecto del grupo 7 "Los Olvidados" – Ingeniería de Sistemas e Innovación Digital,
+Universidad Privada Franz Tamayo, La Paz.
+
+##  Cómo se usa
+
+### 1.Login
 Se pide usuario y contraseña. La contraseña se guarda en la base el programa encripta lo que escribe el usuario de la misma forma y
 compara. Si el usuario está inactivo no puede entrar.
 
@@ -358,7 +368,7 @@ Encima de cada tabla hay un cuadro **Buscar**: filtra las filas mientras se escr
 Las listas desplegables (cargo, residente, personal, turno, rol, estado) se actualizan cada vez que se
 entra a la pestaña. En **Usuarios**, al modificar, si la contraseña se deja vacía se conserva la actual.
 
-##  Validaciones y restricciones
+## 2. Validaciones y restricciones
 
 El programa revisa los datos **antes** de enviarlos, con las mismas reglas que los `CHECK`, `UNIQUE`
 y llaves foráneas del script SQL. Así el usuario recibe un mensaje claro en lugar de un error de la base.
@@ -380,7 +390,7 @@ Si aun así la base rechaza algo, `mostrar_error()` traduce los errores más com
 no se puede eliminar porque tiene registros relacionados (1451), registro relacionado que no existe (1452)
 y dato que no cumple un CHECK (3819).
 
-##  Pestaña Matemáticas
+## 3.Pestaña Matemáticas
 
 Se escribe **una fecha cualquiera** (por defecto la de hoy) y las **personas requeridas por turno**
 (por defecto 1), y se pulsa **Calcular**. El programa toma la semana de lunes a domingo a la que
@@ -410,26 +420,26 @@ Cómo se relaciona con el SQL:
 - Las matrices T y H incluyen solo al personal que tiene al menos un turno esa semana.
 - Esta pestaña **solo lee** datos, no modifica nada en la base.
 
-##  Estructura del código
+## 4. Estructura del código
 
 | Parte | Qué hace |
 |---|---|
-| conectar(), ejecutar(), mostrar_error() | Conexión a MySQL (se abre y cierra por consulta), ejecución de SQL y mensajes de error. |
-| validar_*() | Una función por módulo que devuelve el texto del error o None si todo está bien. |
-| crear_pestana(), llenar_tabla(), activar_busqueda() | Piezas de la interfaz: formulario, tabla y búsqueda. |
-| crear_modulo() | Pestaña genérica con los 5 botones. La usan Plan de atención, Personal, Turnos, Asistencia y Usuarios; cada una solo indica sus campos y su SQL. |
-| abrir_principal() | Ventana principal. Residentes y Cuidados están escritos aparte porque buscan por número de habitación y por CI, y arman cada pestaña. |
-| franja_de(), horas_de(), calcular_semana(), armar_reporte() | Cálculos de la pestaña Matemáticas. armar_reporte() no usa la interfaz ni la base: recibe los datos y devuelve el texto, por lo que se puede probar sola. |
+| `conectar()`, `ejecutar()`, `mostrar_error()` | Conexión a MySQL (se abre y cierra por consulta), ejecución de SQL y mensajes de error. |
+| `validar_*()` | Una función por módulo que devuelve el texto del error o `None` si todo está bien. |
+| `crear_pestana()`, `llenar_tabla()`, `activar_busqueda()` | Piezas de la interfaz: formulario, tabla y búsqueda. |
+| `crear_modulo()` | Pestaña genérica con los 5 botones. La usan Plan de atención, Personal, Turnos, Asistencia y Usuarios; cada una solo indica sus campos y su SQL. |
+| `abrir_principal()` | Ventana principal. Residentes y Cuidados están escritos aparte porque buscan por número de habitación y por CI, y arman cada pestaña. |
+| `franja_de()`, `horas_de()`, `calcular_semana()`, `armar_reporte()` | Cálculos de la pestaña Matemáticas. `armar_reporte()` no usa la interfaz ni la base: recibe los datos y devuelve el texto, por lo que se puede probar sola. |
 | Ventana de login (al final) | Pantalla de inicio de sesión. |
 
-##  Base de datos
+## 5. Base de datos
 
 10 tablas: `rol`, `cargo`, `habitacion`, `personal`, `usuario`, `residente`, `plan_atencion`,
 `cuidado`, `turno` y `asistencia`. `cargo`, `rol` y `habitacion` son tablas aparte (normalización);
 `usuario` se relaciona 1 a 1 con `personal`, y `asistencia` 1 a 1 con `turno`.
 Los detalles de cada restricción están como comentarios en `sql_corregido`.
 
-##  Comandos utilizados
+## 6. Comandos utilizados
 
 ### En la terminal
 
@@ -486,60 +496,7 @@ Los datos se envían con parámetros (`%s`), no pegados al texto de la consulta,
 | `tkinter`: `Tk`, `Frame`, `Label`, `Entry`, `Button`, `Text`, `messagebox` | Ventanas, formularios, botones, cuadro de resultados y mensajes. |
 | `tkinter.ttk`: `Notebook`, `Treeview`, `Combobox`, `Scrollbar` | Pestañas, tablas, listas desplegables y barra de desplazamiento. |
 
-##  Subir el proyecto a GitHub
-
-### Antes de subir
-
-- **Quiten la contraseña real de `conectar()`.** Si el repositorio es público, cualquiera podrá ver
-  y usar las credenciales de la base de datos. Pongan un texto de ejemplo (`"TU_CONTRASEÑA"`) en el
-  archivo que suban.
-- Se recomienda renombrar `sql_corregido` a `sql_corregido.sql`, para que GitHub lo muestre con colores de SQL.
-- Archivos a subir: `programa_completo.py`, `sql_corregido.sql`, `README.md` y, si quieren,
-  `Aporte_Matematico.docx`.
-
-### Primera vez (desde la carpeta del proyecto)
-
-```
-git init
-git add .
-git commit -m "Primer commit: sistema Hogar San Ramón"
-git branch -M main
-git remote add origin https://github.com/USUARIO/REPOSITORIO.git
-git push -u origin main
-```
-
-`USUARIO/REPOSITORIO` se reemplaza por los de su cuenta. Antes hay que crear el repositorio vacío
-en github.com con el botón **New**.
-
-### Para subir cambios después
-
-```
-git status
-git add .
-git commit -m "Descripción del cambio"
-git push
-```
-
-### Para que otro integrante lo descargue
-
-```
-git clone https://github.com/USUARIO/REPOSITORIO.git
-git pull
-```
-
-| Comando | Para qué |
-|---|---|
-| `git init` | Crea el repositorio local en la carpeta. |
-| `git status` | Muestra qué archivos cambiaron. |
-| `git add .` | Prepara todos los cambios para guardarlos. |
-| `git commit -m "mensaje"` | Guarda los cambios con una descripción. |
-| `git branch -M main` | Nombra `main` a la rama principal. |
-| `git remote add origin URL` | Conecta la carpeta con el repositorio de GitHub. |
-| `git push` | Sube los commits a GitHub. |
-| `git clone URL` | Descarga una copia del repositorio. |
-| `git pull` | Trae los cambios nuevos de GitHub. |
-
-##  Limitaciones
+## 7. Limitaciones
 
 - Los datos de personal, turnos y asistencia del documento matemático son ejemplos inventados.
 - La base de datos gratuita puede tardar o fallar; si no conecta, el login muestra "No se pudo conectar".

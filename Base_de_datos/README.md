@@ -52,75 +52,52 @@ PASO 2: EN LA PANTALLA PRINCIPAL ENCONTRARAS UNA CONEXCION LLAMADA `Local instan
 
 PASO 3: DARLE CLICK A ESA CONEXCION
 
-PASO 4: CREAR UNA NUEVA CONSULTA SQL
+PASO 4: Introduce la contraseña del servidor si es necesario.
 
-PASO 5: UNA VEZ DENTRO DE MySQL BUSCAR LA OPCION |FILE| Y 
+PASO 5: Espera a que se establezca la conexión.
 
-PASO 6: SELECCIONA |New Query Tab|
+PASO 6: En el panel SCHEMAS, busca sql10841006.
 
-PASO 7: SE CREARA UNA HOJA EN BLANCO AHI ESCRIBIMOS NUESTRO CODIGO SQL
+PASO 7: Si aparece, selecciónala.
 
-PASO 8: CREAR LAS 6 TABLAS QUE SON:
+PASO 8: Si no aparece, significa que todavía no está creada en ese servidor.
 
-usuarios: almacena los nombres de usuario, contraseñas, roles y estados.
+PASO 9: Dirígete al menú File.
 
-personal: almacena los datos de los trabajadores del hogar.
+PASO 10: Selecciona Open SQL Script.
 
-residente: almacena la información de las personas que viven en el hogar.
+PASO 11: Busca el archivo donde guardaste el código de Hogar San Ramón.
 
-cuidados: registra los cuidados que necesita cada residente.
+PASO 12: Selecciónalo y pulsa Open.
 
-turno: registra los turnos asignados al personal.
+PASO 13: El contenido aparecerá en una pestaña del editor SQL.
 
-asistencia: registra la hora de ingreso y salida del personal.
+PASO 14: Comprueba que tienes abierto el archivo correcto.
 
-PASO 9: ANTES DE CREAR CADA TABLA SE ESCRIBE `CREATE TABLE`
+PASO 15: Localiza el botón Execute (icono del rayo)
 
-PASO 10: EJECUTAR EL CODIGO SQL
+PASO 16: Haz clic para ejecutar el script completo.
 
-PASO 11: YA CON TODO DIHO Y ECHO PRECIONAMOS Ctrl + A para seleccionar el codigo
+PASO 17: Espera a que finalice la ejecución.
 
-paso 12: BUSCA EL BOTON CON SIMBOLO DE RAYO QUE CORRESPONDE A EJECUTAR
+PASO 18: Revisa el apartado Output para comprobar si hubo errores.
 
-paso 13: HAZ CLICK PARA EJECUTAR TODAS LAS INSTRUCCIONES SELECCIONADAS
+PASO 19: En el panel SCHEMAS, pulsa el botón de actualizar.
 
-PASO 14: ESPERA UNOS SEGUNDOS MIENTRAS MySQL PROCESA EL CODIGO
+PASO 20: Despliega sql10841006.
 
-PASO 15: COMPROBAR SI SE CREO LA BASE DE DATOS   
+PASO 21: Abre el apartado Tables.
 
-PASO 17: COMPROBAR QUE SE CREARON LAS 6 TABLAS   
+PASO 22: Comprueba que aparecen las diez tablas del proyecto.
 
-PASO 18: COMPROBAR LA ESTRUCTURA DE LA TABLA     
+PASO 23: Pulsa Raw.
 
+PASO 24: Descarga el archivo MySQL_grupo7 corregido.sql.
 
-Para comprobar que las columnas se hayan creado correctamente, ejecuta los siguientes comandos SQL
+PASO 25: En MySQL Workbench, abre ese archivo descargado.
 
-DESCRIBE usuarios;
+PASO 26: EJECUTAR EL CODIGO SQL
 
-DESCRIBE personal;
+PASO 27: Ejecuta el contenido con el botón del rayo.
 
-DESCRIBE residente;
-
-DESCRIBE cuidados;
-
-DESCRIBE turno;
-
-DESCRIBE asistencia;
-
-Cada comando mostrará las columnas de una tabla, su tipo de dato y si acepta valores nulos
-
-PASO 19: INSERTAR DATOS DE PRUEBA                
-
-PASO 20: CONSULTA LO DATOS GUARDADOS            
-
-PASO 21: INSERTAR UN CUIDADO PARA UN RESIDENTE  
-
-PASO 22: REGISTRAR UN TURNO                     
-
-PASO 23: REGISTRAR LA ASISTENCIA                
-
-PASO 24: VERIFICAR QUE TODO FUNCIONA            
-
-PASO 25: INICIAR PROGRAMA
-
-PASO 26: TODO ESO YA SE GUARDA EN UN ENLACE SIGUIENTE `https://github.com/wilfred2407/grupo-7_los_olvidados_gestion_de_residentes_y_cuidados/blob/f4a2166a03fb4481210563706cad24a825da7b73/Base_de_datos/MySQL_grupo7%20corregido.sql`
+PASO 28: TODO ESO YA SE GUARDA EN UN ENLACE SIGUIENTE `https://github.com/wilfred2407/grupo-7_los_olvidados_gestion_de_residentes_y_cuidados/blob/f4a2166a03fb4481210563706cad24a825da7b73/Base_de_datos/MySQL_grupo7%20corregido.sql`

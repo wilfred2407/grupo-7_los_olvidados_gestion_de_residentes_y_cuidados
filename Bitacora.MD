@@ -67,4 +67,4 @@ y horario y la ultima ventana es planes de atención de un residente que tiene f
 cajas de Fecha, hora de inicio, hora de fin y persona asignada y la ultima ventana es asistencia  que tiene las cajas de Hora de ingreso y de salida (opcional) de un turno salió con éxito pero fallo en la restricciones y lo estamos viendo
 
 # 25-11-2026
-e el día de hoy después de realizar las restricciones realizamos la ultimas ventana creo que es el de matematicas que es un análisis de la semana y designacion de turnos 
+en el día de hoy después de realizar las restricciones realizamos la ultimas ventana creo que es el de matemáticas que es un análisis de la semana y designación de turnos y también se agrego la parte del aporte de las matemáticas en nuestro programa de Python. interfaz grafica final.

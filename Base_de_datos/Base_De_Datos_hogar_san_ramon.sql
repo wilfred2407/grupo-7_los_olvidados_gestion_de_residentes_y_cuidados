@@ -1,28 +1,32 @@
 -- =====================================================
 -- Base de datos: Hogar San Ramón
 -- Script con las 10 tablas del diagrama E-R normalizado
+-- Versión para TiDB Cloud (base compartida por el grupo)
 -- =====================================================
 
-USE sql10841006;
+CREATE DATABASE IF NOT EXISTS hogar_san_ramon;
+USE hogar_san_ramon;
 
--- ----------------- BORRAR TABLAS (para poder volver a ejecutar el script) -----------------
--- se borran primero las que dependen de otras (en orden inverso a la creación)
-drop table if exists asistencia;
-drop table if exists turno;
-drop table if exists cuidado;
-drop table if exists plan_atencion;
-drop table if exists usuario;
-drop table if exists residente;
-drop table if exists personal;
-drop table if exists habitacion;
-drop table if exists cargo;
-drop table if exists rol;
+ SET GLOBAL tidb_enable_check_constraint = ON;
+
+-- ----------------- BORRAR TABLAS -----------------
+
+ drop table if exists asistencia;
+ drop table if exists turno;
+ drop table if exists cuidado;
+ drop table if exists plan_atencion;
+ drop table if exists usuario;
+ drop table if exists residente;
+ drop table if exists personal;
+ drop table if exists habitacion;
+ drop table if exists cargo;
+ drop table if exists rol;
 
 -- primero se crean las tablas que no dependen de otras
 -- y despues las que tienen llaves foraneas (foreign key)
 
 -- ----------------- TABLA 1: rol -----------------
-create table rol (
+create table if not exists rol (
 id_rol int primary key auto_increment,
 nombre_rol varchar (15) not null unique,
 CONSTRAINT chk_rol_nombre_largo CHECK (CHAR_LENGTH(TRIM(nombre_rol)) >= 7)
@@ -30,7 +34,7 @@ CONSTRAINT chk_rol_nombre_largo CHECK (CHAR_LENGTH(TRIM(nombre_rol)) >= 7)
 -- 15 en nombre_rol porque los nombres de los roles son cortos (administración, enfermeria, cuidador)
 
 -- ----------------- TABLA 2: cargo -----------------
-create table cargo (
+create table if not exists cargo (
 id_cargo int primary key auto_increment,
 nombre_cargo varchar (25) not null unique,
 CONSTRAINT chk_cargo_nombre_largo CHECK (CHAR_LENGTH(TRIM(nombre_cargo)) >= 5)
@@ -38,7 +42,7 @@ CONSTRAINT chk_cargo_nombre_largo CHECK (CHAR_LENGTH(TRIM(nombre_cargo)) >= 5)
 -- 25 en nombre_cargo porque los cargos no tienen nombres muy largos
 
 -- ----------------- TABLA 3: habitacion -----------------
-create table habitacion (
+create table if not exists habitacion (
 id_habitacion int primary key auto_increment,
 numero int not null unique,
 CONSTRAINT chk_habitacion_numero CHECK (numero > 0 AND numero <= 300)
@@ -47,7 +51,7 @@ CONSTRAINT chk_habitacion_numero CHECK (numero > 0 AND numero <= 300)
 -- y debe estar entre 1 y 300
 
 -- ----------------- TABLA 4: personal -----------------
-create table personal (
+create table if not exists personal (
 id_personal int primary key auto_increment,
 nombres varchar (40) not null,
 apellidos varchar (30) not null,
@@ -62,7 +66,7 @@ CONSTRAINT chk_personal_telefono CHECK (telefono REGEXP '^[67][0-9]{7}$')
 -- el cargo ya no esta dentro de personal, ahora es una tabla aparte (normalizacion)
 
 -- ----------------- TABLA 5: usuario -----------------
-create table usuario (
+create table if not exists usuario (
 id_usuario int primary key auto_increment,
 nombre_usuario varchar (15) not null unique,
 contrasena varchar (64) not null,
@@ -80,7 +84,7 @@ CONSTRAINT chk_usuario_estado CHECK (estado IN ('activo', 'inactivo'))
 -- id_personal es unico: cada persona del personal tiene un solo usuario (relacion 1 a 1)
 
 -- ----------------- TABLA 6: residente -----------------
-create table residente (
+create table if not exists residente (
 id_residente int primary key auto_increment,
 ci_residente varchar (11) not null unique,
 nombres varchar (40) not null,
@@ -97,7 +101,7 @@ CONSTRAINT chk_residente_fecha_nac CHECK (fecha_nac < '2000-01-01')
 -- la habitacion ahora es una tabla aparte (normalizacion)
 
 -- ----------------- TABLA 7: plan_atencion -----------------
-create table plan_atencion (
+create table if not exists plan_atencion (
 id_plan int primary key auto_increment,
 descripcion varchar (200) not null,
 fecha_inicio date not null,
@@ -112,7 +116,7 @@ CONSTRAINT chk_plan_fechas CHECK (fecha_fin IS NULL OR fecha_fin >= fecha_inicio
 -- si se registra una fecha de finalizacion, no puede ser anterior a la fecha de inicio
 
 -- ----------------- TABLA 8: cuidado -----------------
-create table cuidado (
+create table if not exists cuidado (
 id_cuidado int primary key auto_increment,
 descripcion varchar (250) not null,
 horario time not null,
@@ -126,7 +130,7 @@ CONSTRAINT chk_cuidado_descripcion_largo CHECK (CHAR_LENGTH(TRIM(descripcion)) >
 -- y que persona del personal es la responsable de aplicarlo
 
 -- ----------------- TABLA 9: turno -----------------
-create table turno (
+create table if not exists turno (
 id_turno int primary key auto_increment,
 fecha date not null,
 hora_inicio time not null,
@@ -140,7 +144,7 @@ CONSTRAINT chk_turno_horas CHECK (hora_inicio <> hora_fin)
 -- y la hora de inicio debe ser diferente de la hora de finalizacion
 
 -- ----------------- TABLA 10: asistencia -----------------
-create table asistencia (
+create table if not exists asistencia (
 id_asistencia int primary key auto_increment,
 hora_ingreso time not null,
 hora_salida time null,
@@ -150,13 +154,18 @@ foreign key (id_turno) references turno (id_turno)
 -- cada asistencia pertenece a un turno (relacion 1 a 1)
 -- hora_salida puede quedar vacia hasta que la persona termine su turno
 
-USE sql10841006;
-insert into rol (nombre_rol) values ('administrador');
-insert into cargo (nombre_cargo) values ('Administrador');
-insert into habitacion (numero) values (1),(2),(3),(4),(5),(6),(7),(8),(9),(10);
+-- ----------------- DATOS INICIALES -----------------
+-- "insert ignore" y "where not exists" evitan duplicados si se vuelve a ejecutar
+insert ignore into rol (nombre_rol) values ('administrador');
+insert ignore into cargo (nombre_cargo) values ('Administrador');
+insert ignore into habitacion (numero) values (1),(2),(3),(4),(5),(6),(7),(8),(9),(10);
+
 insert into personal (nombres, apellidos, telefono, id_cargo)
-values ('Admin', 'Sistema', '70000000', 1);
-insert into usuario (nombre_usuario, contrasena, estado, id_rol, id_personal)
+select 'Admin', 'Sistema', '70000000', 1
+from dual
+where not exists (select 1 from personal where nombres = 'Admin' and apellidos = 'Sistema');
+
+insert ignore into usuario (nombre_usuario, contrasena, estado, id_rol, id_personal)
 values ('admin', sha2('admin1234', 256), 'activo', 1, 1);
 
 -- ----------------- CONSULTAS DE PRUEBA -----------------

@@ -43,16 +43,19 @@ turnos y repartos de horas del personal y lo que necesitamos para correr el prot
 |PASO 1:| ABRIR MySQL WORKBENCH
 una ves abrir el MYSQL WORKBENCH apretar colocar nuevo servidor y colocar los datos necesarios que son :
 
-    host="sql10.freesqldatabase.com",
-    user="sql10841006",
-    password="############"
-    port=3306
+
+    host="gateway01.ap-northeast-1.prod.aws.tidbcloud.com",
+    port=4000,
+    user="TU_USUARIO.root",
+    password="TU_CONTRASEÑA",
+    database="hogar_san_ramon"
+    
 
 |PASO 2:| CREAR UNA NUEVA CONSULTA SQL
 tenemos que crear la base de datos que vamos a utilizar luego tenemos que usar la base de datos con los siguientes comandos
 
-  CREATE DATABASE sql10841006
-  USE sql10841006;
+  CREATE DATABASE hogar_san_ramon
+  USE hogar_san_ramon;
 
 |PASO 3:| COMPROBAR LA ESTRUCTURA DE LAS TABLAS
 comprobamos la estructura de las tablas y la normalizamos con las 3 normas y nos dio el resultado con las 3 normas
@@ -271,10 +274,13 @@ import mysql.connector
 
 \`\`\`python
 con = mysql.connector.connect(
-    host="sql10.freesqldatabase.com",
-    user="sql10841006",
-    password="CONTRASEÑA",
-    database="sql10841006"
+    host="gateway01.ap-northeast-1.prod.aws.tidbcloud.com",
+    port=4000,
+    user="TU_USUARIO.root",
+    password="############",
+    database="hogar_san_ramon",
+
+)
 )
 \`\`\`
 

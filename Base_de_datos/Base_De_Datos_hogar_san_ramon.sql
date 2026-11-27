@@ -1,6 +1,8 @@
 -- =====================================================
 -- Base de datos: Hogar San Ramón
 -- Script con las 10 tablas del diagrama E-R normalizado
+-- Cambio: turno es un catálogo (Mañana, Tarde, Noche) y
+-- muchos del personal tienen un mismo turno (muchos a uno)
 -- =====================================================
 
 CREATE DATABASE IF NOT EXISTS hogar_san_ramon;
@@ -8,16 +10,21 @@ USE hogar_san_ramon;
 
 SET GLOBAL tidb_enable_check_constraint = ON;
 
+-- ----------------- BORRAR TABLAS (para poder volver a ejecutar el script) -----------------
+-- se desactiva la revision de llaves foraneas solo para poder borrar en cualquier orden
+-- CUIDADO: esto borra todos los datos de las tablas
+SET FOREIGN_KEY_CHECKS = 0;
 drop table if exists asistencia;
-drop table if exists turno;
 drop table if exists cuidado;
 drop table if exists plan_atencion;
-drop table if exists usuario;
 drop table if exists residente;
+drop table if exists usuario;
 drop table if exists personal;
+drop table if exists turno;
 drop table if exists habitacion;
 drop table if exists cargo;
 drop table if exists rol;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- primero se crean las tablas que no dependen de otras
 -- y despues las que tienen llaves foraneas (foreign key)
@@ -47,22 +54,38 @@ CONSTRAINT chk_habitacion_numero CHECK (numero > 0 AND numero <= 300)
 -- el numero de habitacion es unico, no puede haber dos habitaciones con el mismo número
 -- y debe estar entre 1 y 300
 
--- ----------------- TABLA 4: personal -----------------
+-- ----------------- TABLA 4: turno -----------------
+create table turno (
+id_turno int primary key auto_increment,
+nombre_turno varchar (15) not null unique,
+hora_inicio time not null,
+hora_fin time not null,
+CONSTRAINT chk_turno_nombre_largo CHECK (CHAR_LENGTH(TRIM(nombre_turno)) >= 4),
+CONSTRAINT chk_turno_horas CHECK (hora_inicio <> hora_fin)
+);
+-- el turno es un horario fijo (Mañana, Tarde, Noche) que comparten varias personas
+-- la hora de inicio debe ser diferente de la hora de finalizacion
+-- (el turno de noche termina al dia siguiente, por eso no se compara que fin sea mayor que inicio)
+
+-- ----------------- TABLA 5: personal -----------------
 create table personal (
 id_personal int primary key auto_increment,
 nombres varchar (40) not null,
 apellidos varchar (30) not null,
 telefono varchar (8) not null,
 id_cargo int not null,
+id_turno int not null,
 foreign key (id_cargo) references cargo (id_cargo),
+foreign key (id_turno) references turno (id_turno),
 CONSTRAINT chk_personal_nombres_largo CHECK (CHAR_LENGTH(TRIM(nombres)) >= 3),
 CONSTRAINT chk_personal_apellidos_largo CHECK (CHAR_LENGTH(TRIM(apellidos)) >= 3),
 CONSTRAINT chk_personal_telefono CHECK (telefono REGEXP '^[67][0-9]{7}$')
 );
 -- 40 en nombres porque algunos tienen hasta 3 nombres, 30 en apellidos y 8 en telefono
--- el cargo ya no esta dentro de personal, ahora es una tabla aparte (normalizacion)
+-- el cargo y el turno son tablas aparte (normalizacion)
+-- muchas personas del personal pueden tener el mismo turno (relacion muchos a uno)
 
--- ----------------- TABLA 5: usuario -----------------
+-- ----------------- TABLA 6: usuario -----------------
 create table usuario (
 id_usuario int primary key auto_increment,
 nombre_usuario varchar (15) not null unique,
@@ -80,7 +103,7 @@ CONSTRAINT chk_usuario_estado CHECK (estado IN ('activo', 'inactivo'))
 -- estado es "activo" o "inactivo", por eso 10
 -- id_personal es unico: cada persona del personal tiene un solo usuario (relacion 1 a 1)
 
--- ----------------- TABLA 6: residente -----------------
+-- ----------------- TABLA 7: residente -----------------
 create table residente (
 id_residente int primary key auto_increment,
 ci_residente varchar (11) not null unique,
@@ -98,7 +121,7 @@ CONSTRAINT chk_residente_fecha_nac CHECK (fecha_nac < '2000-01-01')
 -- la habitacion ahora es una tabla aparte (normalizacion)
 -- id_habitacion es unico: dos residentes no pueden ocupar la misma habitacion
 
--- ----------------- TABLA 7: plan_atencion -----------------
+-- ----------------- TABLA 8: plan_atencion -----------------
 create table plan_atencion (
 id_plan int primary key auto_increment,
 descripcion varchar (200) not null,
@@ -115,7 +138,7 @@ CONSTRAINT chk_plan_fechas CHECK (fecha_fin IS NULL OR fecha_fin >= fecha_inicio
 -- fecha_fin puede quedar vacia si el plan todavia sigue vigente
 -- si se registra una fecha de finalizacion, no puede ser anterior a la fecha de inicio
 
--- ----------------- TABLA 8: cuidado -----------------
+-- ----------------- TABLA 9: cuidado -----------------
 create table cuidado (
 id_cuidado int primary key auto_increment,
 descripcion varchar (250) not null,
@@ -129,31 +152,19 @@ CONSTRAINT chk_cuidado_descripcion_largo CHECK (CHAR_LENGTH(TRIM(descripcion)) >
 -- 250 en descripcion para poder escribir bien que cuidado se le aplica al residente
 -- y que persona del personal es la responsable de aplicarlo
 
--- ----------------- TABLA 9: turno -----------------
-create table turno (
-id_turno int primary key auto_increment,
-fecha date not null,
-hora_inicio time not null,
-hora_fin time not null,
-id_personal int not null,
-foreign key (id_personal) references personal (id_personal),
-unique (id_personal, fecha),
-CONSTRAINT chk_turno_horas CHECK (hora_inicio <> hora_fin)
-);
--- la misma persona solo puede tener un turno por dia
--- (en el programa el turno se escribe solo con mes y dia, el año es el actual)
--- y la hora de inicio debe ser diferente de la hora de finalizacion
-
 -- ----------------- TABLA 10: asistencia -----------------
 create table asistencia (
 id_asistencia int primary key auto_increment,
+fecha date not null,
 hora_ingreso time not null,
 hora_salida time null,
-id_turno int not null unique,
-foreign key (id_turno) references turno (id_turno),
+id_personal int not null,
+foreign key (id_personal) references personal (id_personal),
+unique (id_personal, fecha),
 CONSTRAINT chk_asistencia_horas CHECK (hora_salida IS NULL OR hora_ingreso <> hora_salida)
 );
--- cada asistencia pertenece a un turno (relacion 1 a 1)
+-- la asistencia ahora se guarda por persona y por fecha (antes dependia del turno)
+-- una persona solo puede tener una asistencia por dia
 -- hora_salida puede quedar vacia hasta que la persona termine su turno
 -- si se registra la hora de salida, no puede ser igual a la hora de ingreso
 
@@ -161,13 +172,15 @@ CONSTRAINT chk_asistencia_horas CHECK (hora_salida IS NULL OR hora_ingreso <> ho
 insert into rol (nombre_rol) values ('administrador/a'),('doctor/a'),('enfermero/a'),('cuidador/a'),('limpieza/a');
 insert into cargo (nombre_cargo) values ('Administrador/a'),('Doctor/a'),('Enfermero/a'),('Cuidador/a'),('Limpieza/a');
 insert into habitacion (numero) values (1),(2),(3),(4),(5),(6),(7),(8),(9),(10);
-insert into personal (nombres, apellidos, telefono, id_cargo)
-values ('Admin', 'Sistema', '63124608', 1);
+insert into turno (nombre_turno, hora_inicio, hora_fin)
+values ('Mañana', '06:00:00', '14:00:00'),('Tarde', '14:00:00', '22:00:00'),('Noche', '22:00:00', '06:00:00');
+insert into personal (nombres, apellidos, telefono, id_cargo, id_turno)
+values ('Admin', 'Sistema', '63124608', 1, 1);
 insert into usuario (nombre_usuario, contrasena, estado, id_rol, id_personal)
 values ('admin', sha2('admin1234', 256), 'activo', 1, 1);
 
 -- ----------------- CONSULTAS DE PRUEBA -----------------
-select * from cuidado;
+select * from turno;
+select * from personal;
 select * from asistencia;
-select * from residente;
 select * from habitacion;

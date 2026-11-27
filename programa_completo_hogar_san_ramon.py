@@ -10,24 +10,20 @@ from datetime import datetime, timedelta
 
 
 # ---------------------- CONEXIÓN ----------------------
-RUTA_CA = ""
+
 
 
 def conectar():
     opciones = dict(
-        host="gateway01.ap-northeast-1.prod.aws.tidbcloud.com",
-        port=4000,
-        user="4PpZhUJ3CTg9bgu.root",
-        password="MLqTAeg962j1lpCF",
-        database="hogar_san_ramon",
+        host="blwb0gm9ri14u7s5jq6z-mysql.services.clever-cloud.com",
+        port=3306,
+        user="u860a76ee6cz30lq",
+        password="KMI8U5Zu9Q3fadMcamOb",
+        database="blwb0gm9ri14u7s5jq6z",
         connection_timeout=10,
         use_pure=True,
-        ssl_disabled=False,       
-    )
-    if RUTA_CA:
-        opciones.update(ssl_ca=RUTA_CA, ssl_verify_cert=True, ssl_verify_identity=True)
+        ssl_disabled=True,)
     return mysql.connector.connect(**opciones)
-
 
 def ejecutar(sql, datos=(), leer=False):
     db = conectar()
@@ -48,24 +44,31 @@ def mostrar_error(e):
     if codigo == 1062:
         if "ci_residente" in detalle:
             mensaje = "Ya existe un residente con ese CI."
-        elif "id_habitacion" in detalle:
-            mensaje = "Esa habitación ya está ocupada por otro residente."
+        elif "uq_residente_cama" in detalle:
+            mensaje = "Esa cama ya está ocupada. Cada habitación admite máximo 4 residentes (a, b, c y d)."
         elif "nombre_usuario" in detalle:
             mensaje = "Ese nombre de usuario ya existe."
         elif "usuario.id_personal" in detalle:
             mensaje = "Esa persona del personal ya tiene un usuario."
-        elif "turno.id_personal" in detalle:
-            mensaje = "Esa persona ya tiene un turno ese día (solo se permite un turno por persona por día)."
-        elif "id_turno" in detalle:
-            mensaje = "Ese turno ya tiene una asistencia registrada."
+        elif "uq_asistencia_persona_dia" in detalle:
+            mensaje = "Esa persona ya tiene una asistencia registrada ese día."
+        elif "nombre_turno" in detalle:
+            mensaje = "Ya existe un turno con ese nombre."
         else:
             mensaje = "Ya existe un registro con ese dato."
     elif codigo == 1451:
-        mensaje = "No se puede eliminar: tiene registros relacionados (cuidados, planes, turnos, usuario, etc.)."
+        mensaje = "No se puede eliminar: tiene registros relacionados (cuidados, planes, personal, usuario, etc.)."
     elif codigo == 1452:
-        mensaje = "El registro relacionado (residente, personal, cargo, rol o turno) no existe."
+        mensaje = "El registro relacionado (residente, habitación, personal, cargo, rol o turno) no existe."
     elif codigo == 3819:
-        mensaje = "Hay un dato que no cumple las restricciones de la base de datos."
+        if "chk_asistencia_horas" in detalle:
+            mensaje = "La hora de ingreso y la hora de salida no pueden ser iguales."
+        elif "chk_plan_fecha_inicio" in detalle:
+            mensaje = "La fecha de inicio debe estar entre 2020-01-01 y 2030-12-31."
+        elif "chk_residente_cama" in detalle:
+            mensaje = "La cama debe ser a, b, c o d."
+        else:
+            mensaje = "Hay un dato que no cumple las restricciones de la base de datos."
     else:
         mensaje = str(e)
     messagebox.showerror("Error", mensaje)
@@ -81,6 +84,19 @@ MENSAJE_CI = ("El CI debe empezar con 6 a 8 números (0-9) y puede terminar con 
               "extensión de hasta 3 caracteres (ejemplo: 1234567 o 1234567A).")
 
 
+def partir_habitacion(texto):
+    # "12b" -> (12, "b"): número de habitación (1 a 300) y cama (a, b, c o d).
+    # Cada habitación admite máximo 4 residentes, uno por cama.
+    m = re.fullmatch(r"([0-9]{1,3})([A-Da-d])", texto)
+    if m is None or not 1 <= int(m.group(1)) <= 300:
+        return None
+    return int(m.group(1)), m.group(2).lower()
+
+
+MENSAJE_HAB = ("La habitación debe ser el número (1 a 300) y la letra de la cama: a, b, c o d "
+               "(ejemplo: 1a, 1b). Máximo 4 residentes por habitación.")
+
+
 def validar_residente(ci, nombres, apellidos, fecha, hab):
     if not ci_valido(ci):
         return MENSAJE_CI
@@ -94,8 +110,8 @@ def validar_residente(ci, nombres, apellidos, fecha, hab):
         return "Fecha inválida. Use el formato AAAA-MM-DD."
     if f >= datetime(2000, 1, 1):
         return "La fecha de nacimiento debe ser anterior al 2000-01-01."
-    if not hab.isdigit() or not 1 <= int(hab) <= 300:
-        return "La habitación debe ser un número entre 1 y 300."
+    if partir_habitacion(hab) is None:
+        return MENSAJE_HAB
     return None
 
 
@@ -112,7 +128,7 @@ def validar_cuidado(ci, descripcion, horario):
 
 
 def fecha_valida(texto):
-    # devuelve la fecha o None si el formato AAAA-MM-DD es incorrecto
+    # devuelve la fecha o error si el formato AAAA-MM-DD es incorrecto
     try:
         return datetime.strptime(texto, "%Y-%m-%d")
     except ValueError:
@@ -120,7 +136,7 @@ def fecha_valida(texto):
 
 
 def hora_valida(texto):
-    # devuelve la hora o None si el formato HH:MM es incorrecto
+    # devuelve la hora o error si el formato HH:MM es incorrecto
     try:
         return datetime.strptime(texto, "%H:%M")
     except ValueError:
@@ -131,16 +147,12 @@ def hora_valida(texto):
 PLAN_FECHA_MIN = datetime(2020, 1, 1)
 PLAN_FECHA_MAX = datetime(2030, 12, 31)
 
-
 def fecha_turno(texto):
     # el turno se escribe solo con mes y día (MM-DD); el año es el año actual
     if re.fullmatch(r"[0-9]{2}-[0-9]{2}", texto) is None:
         return None
     return fecha_valida(f"{datetime.now().year}-{texto}")
 
-
-# Cada validar_xxx recibe la lista de valores del formulario (en el mismo orden de los campos)
-# y devuelve un texto con el error, o None si todo está bien. "nuevo" es True al registrar.
 def validar_plan(v, nuevo):
     descripcion, inicio, fin, residente = v
     if not 5 <= len(descripcion) <= 200:
@@ -148,6 +160,8 @@ def validar_plan(v, nuevo):
     f_ini = fecha_valida(inicio)
     if f_ini is None:
         return "Fecha de inicio inválida. Use el formato AAAA-MM-DD."
+    if not datetime(2020, 1, 1) <= f_ini <= datetime(2030, 12, 31):
+        return "La fecha de inicio debe estar entre 2020-01-01 y 2030-12-31."
     if not PLAN_FECHA_MIN <= f_ini <= PLAN_FECHA_MAX:
         return (f"La fecha de inicio debe estar entre {PLAN_FECHA_MIN:%Y-%m-%d} "
                 f"y {PLAN_FECHA_MAX:%Y-%m-%d}.")
@@ -163,7 +177,7 @@ def validar_plan(v, nuevo):
 
 
 def validar_personal(v, nuevo):
-    nombres, apellidos, telefono, cargo = v
+    nombres, apellidos, telefono, cargo, turno = v
     if not 3 <= len(nombres) <= 40:
         return "Los nombres deben tener entre 3 y 40 caracteres."
     if not 3 <= len(apellidos) <= 30:
@@ -172,35 +186,60 @@ def validar_personal(v, nuevo):
         return "El teléfono debe tener 8 números y empezar con 6 o 7."
     if not cargo:
         return "Elija un cargo."
+    if not turno:
+        return "Elija un turno."
     return None
 
 
 def validar_turno(v, nuevo):
-    fecha, inicio, fin, personal = v
-    if fecha_turno(fecha) is None:
-        return "Fecha inválida. Escriba solo el mes y el día con el formato MM-DD (ejemplo 11-26)."
+    # el turno es un horario fijo (Mañana, Tarde, Noche) que comparten varias personas del personal
+    nombre, inicio, fin = v
+    if not 4 <= len(nombre) <= 15:
+        return "El nombre del turno debe tener entre 4 y 15 caracteres."
     h_ini = hora_valida(inicio)
     h_fin = hora_valida(fin)
     if h_ini is None or h_fin is None:
         return "Las horas deben tener el formato HH:MM (ejemplo 08:30)."
     if h_ini == h_fin:
         return "La hora de inicio debe ser diferente a la hora de fin."
+    return None
+
+
+def armar_fecha(texto):
+    # acepta solo mes y día (MM-DD, se usa el año actual) o la fecha completa AAAA-MM-DD
+    f = fecha_valida(texto)
+    if f is None:
+        f = fecha_valida(f"{datetime.now().year}-{texto}")
+    return f
+
+
+def validar_asistencia(v, nuevo):
+    fecha, ingreso, salida, personal = v
+    if armar_fecha(fecha) is None:
+        return "Fecha inválida. Escriba solo mes y día (MM-DD, ejemplo 11-27)."
+    h_ing = hora_valida(ingreso)
+    if h_ing is None:
+        return "La hora de ingreso debe tener el formato HH:MM (ejemplo 08:30)."
+    if salida:
+        h_sal = hora_valida(salida)
+        if h_sal is None:
+            return "La hora de salida debe tener el formato HH:MM o quedar vacía."
+        if h_sal == h_ing:
+            return "La hora de ingreso y la hora de salida no pueden ser iguales."
     if not personal:
         return "Elija una persona del personal."
     return None
 
 
-def validar_asistencia(v, nuevo):
-    ingreso, salida, turno = v
-    if hora_valida(ingreso) is None:
-        return "La hora de ingreso debe tener el formato HH:MM (ejemplo 08:30)."
-    if salida and hora_valida(salida) is None:
-        return "La hora de salida debe tener el formato HH:MM o quedar vacía."
-    if salida and hora_valida(salida) == hora_valida(ingreso):
-        return "La hora de ingreso debe ser diferente a la hora de salida."
-    if not turno:
-        return "Elija un turno."
-    return None
+def armar_asistencia(d, id_):
+    # una persona solo puede tener una asistencia por día (UNIQUE id_personal + fecha en el SQL)
+    fecha, ingreso, salida, personal = d
+    fecha = armar_fecha(fecha).strftime("%Y-%m-%d")
+    if id_ is None:
+        return ("insert into asistencia (fecha, hora_ingreso, hora_salida, id_personal) values (%s, %s, %s, %s)",
+                (fecha, ingreso, salida, personal))
+    return ("update asistencia set fecha=%s, hora_ingreso=%s, hora_salida=%s, id_personal=%s "
+            "where id_asistencia=%s", (fecha, ingreso, salida, personal, id_))
 
 
 def validar_usuario(v, nuevo):
@@ -427,9 +466,10 @@ def armar_turno(d, id_):
             (fecha, d[1], d[2], d[3], id_))
 
 
-# ---------------------- MATEMÁTICAS ----------------------
+# ---------------------- PARTE DEL APORTE DE MATEMÁTICAS ----------------------
 # Solo LEE datos (select), por eso no puede romper ninguna restricción del SQL.
-# La tabla turno no guarda "mañana/tarde/noche": se deduce de hora_inicio.
+# Cada asistencia (persona + fecha) cuenta como un día trabajado en el turno de esa persona
+# (personal.id_turno -> turno). La franja se deduce de la hora_inicio del turno.
 DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
 DIAS_LARGO = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
 FRANJAS = ["Mañana", "Tarde", "Noche"]
@@ -453,7 +493,7 @@ def horas_de(seg_ini, seg_fin):
 
 
 def calcular_semana(filas, requeridas):
-    # filas = (fecha, seg_inicio, seg_fin, id_personal, nombre) de los turnos de la semana
+    # filas = (fecha, seg_inicio, seg_fin, id_personal, nombre) de las asistencias de la semana
     D = [[0] * 7 for _ in range(3)]               # asignado: personas por franja y día
     personal = {}                                  # id -> [nombre, trabaja(0/1) por día, horas por día, turnos]
     for fecha, ini, fin, id_p, nombre in filas:
@@ -517,7 +557,7 @@ def armar_reporte(filas, fechas_nac, lunes, requeridas, hoy):
     out.append("2. MATRICES DE TURNOS (3 horarios × 7 días = 21 turnos)")
     out.append(texto_matriz("Matriz B (cobertura requerida)", FRANJAS, B))
     out.append("")
-    out.append(texto_matriz("Matriz D (asignado según la tabla turno)", FRANJAS, D))
+    out.append(texto_matriz("Matriz D (personas con asistencia, por turno y día)", FRANJAS, D))
     out.append("")
     out.append(texto_matriz("Matriz A = D - B  (0 = completo, negativo = falta personal)", FRANJAS, A, signo=True))
     faltas = [f"   - {DIAS_LARGO[j]} {lunes + timedelta(days=j)}, {FRANJAS[i].lower()}: "
@@ -528,18 +568,18 @@ def armar_reporte(filas, fechas_nac, lunes, requeridas, hoy):
     out.append("")
 
     if not personal:
-        out.append("No hay turnos registrados en esa semana, por eso no se calculan las matrices T y H.")
+        out.append("No hay asistencias registradas en esa semana, por eso no se calculan las matrices T y H.")
         return "\n".join(out)
 
     ids = sorted(personal)
     nombres = [personal[i][0] for i in ids]
-    out.append(texto_matriz("Matriz T (1 = trabaja ese día, 0 = descansa)", nombres, [personal[i][1] for i in ids]))
+    out.append(texto_matriz("Matriz T (1 = asistió ese día, 0 = no asistió)", nombres, [personal[i][1] for i in ids]))
     out.append("(la suma de cada fila son los días que trabaja la persona)")
     out.append("")
 
     # 3. Horas, promedio y derivada
     out.append("3. HORAS, PROMEDIO Y DERIVADA")
-    out.append(texto_matriz("Matriz H (horas trabajadas, según hora_inicio y hora_fin)", nombres,
+    out.append(texto_matriz("Matriz H (horas de su turno en los días que asistió)", nombres,
                             [personal[i][2] for i in ids]))
     horas = [sum(personal[i][2]) for i in ids]
     n = len(ids)
@@ -571,10 +611,11 @@ def calcular_matematicas(fecha_txt, req_txt, caja):
         return
     lunes = f.date() - timedelta(days=f.weekday())      # cualquier fecha sirve: se toma su semana
     try:
-        filas = ejecutar("select t.fecha, time_to_sec(t.hora_inicio), time_to_sec(t.hora_fin), "
-                         "t.id_personal, concat(p.nombres,' ',p.apellidos) from turno t "
-                         "join personal p on t.id_personal = p.id_personal "
-                         "where t.fecha between %s and %s",
+        filas = ejecutar("select a.fecha, time_to_sec(t.hora_inicio), time_to_sec(t.hora_fin), "
+                         "a.id_personal, concat(p.nombres,' ',p.apellidos) from asistencia a "
+                         "join personal p on a.id_personal = p.id_personal "
+                         "join turno t on p.id_turno = t.id_turno "
+                         "where a.fecha between %s and %s",
                          (lunes, lunes + timedelta(days=6)), True)
         fechas_nac = [r[0] for r in ejecutar("select fecha_nac from residente", (), True)]
     except Exception as e:
@@ -650,7 +691,7 @@ def abrir_principal(id_personal):
     # ================= RESIDENTES =================
     ent_res, bot_res, tabla_res = crear_pestana(
         cuaderno, "Residentes",
-        ["CI", "Nombres", "Apellidos", "Fecha nac. (AAAA-MM-DD)", "N° habitación"],
+        ["CI", "Nombres", "Apellidos", "Fecha nac. (AAAA-MM-DD)", "Habitación (1a, 1b... máx. 4)"],
         ["CI", "Nombres", "Apellidos", "Fecha nac.", "Habitación"])
 
     def mostrar_residentes():
@@ -658,7 +699,7 @@ def abrir_principal(id_personal):
         datos_res.clear()
         try:
             filas = ejecutar("select r.id_residente, r.ci_residente, r.nombres, r.apellidos, "
-                             "r.fecha_nac, h.numero from residente r "
+                             "r.fecha_nac, concat(h.numero, r.cama) from residente r "
                              "join habitacion h on r.id_habitacion = h.id_habitacion", (), True)
         except Exception as e:
             mostrar_error(e)
@@ -692,11 +733,12 @@ def abrir_principal(id_personal):
             messagebox.showwarning("Validación", error)
             return
         try:
-            id_hab = buscar_habitacion(datos[4])
+            numero, cama = partir_habitacion(datos[4])
+            id_hab = buscar_habitacion(str(numero))
             if id_hab is None:
                 return
-            ejecutar("insert into residente (ci_residente, nombres, apellidos, fecha_nac, id_habitacion) "
-                     "values (%s, %s, %s, %s, %s)", (*datos[:4], id_hab))
+            ejecutar("insert into residente (ci_residente, nombres, apellidos, fecha_nac, id_habitacion, cama) "
+                     "values (%s, %s, %s, %s, %s, %s)", (*datos[:4], id_hab, cama))
             messagebox.showinfo("Listo", "Residente registrado")
             limpiar_residente()
             mostrar_residentes()
@@ -713,12 +755,13 @@ def abrir_principal(id_personal):
             messagebox.showwarning("Validación", error)
             return
         try:
-            id_hab = buscar_habitacion(datos[4])
+            numero, cama = partir_habitacion(datos[4])
+            id_hab = buscar_habitacion(str(numero))
             if id_hab is None:
                 return
             ejecutar("update residente set ci_residente=%s, nombres=%s, apellidos=%s, "
-                     "fecha_nac=%s, id_habitacion=%s where id_residente=%s",
-                     (*datos[:4], id_hab, sel["res"]))
+                     "fecha_nac=%s, id_habitacion=%s, cama=%s where id_residente=%s",
+                     (*datos[:4], id_hab, cama, sel["res"]))
             messagebox.showinfo("Listo", "Residente modificado")
             limpiar_residente()
             mostrar_residentes()
@@ -853,7 +896,7 @@ def abrir_principal(id_personal):
     refrescar["Plan de atención"] = crear_modulo(
         cuaderno, "Plan de atención",
         [("Descripción (5-200)", "texto", None, "Descripción"),
-         ("Fecha inicio (AAAA-MM-DD)", "texto", None, "Inicio"),
+         ("Fecha inicio (2020-01-01 a 2030-12-31)", "texto", None, "Inicio"),
          ("Fecha fin (opcional)", "texto", None, "Fin"),
          ("Residente", "lista", "select id_residente, concat(nombres,' ',apellidos) from residente order by nombres",
           "Residente")],
@@ -871,45 +914,43 @@ def abrir_principal(id_personal):
         [("Nombres", "texto", None, "Nombres"),
          ("Apellidos", "texto", None, "Apellidos"),
          ("Teléfono (8 dígitos, empieza con 6 o 7)", "texto", None, "Teléfono"),
-         ("Cargo", "lista", "select id_cargo, nombre_cargo from cargo order by nombre_cargo", "Cargo")],
-        "select p.id_personal, p.nombres, p.apellidos, p.telefono, concat(c.id_cargo,' - ',c.nombre_cargo) "
-        "from personal p join cargo c on p.id_cargo = c.id_cargo order by p.id_personal",
+         ("Cargo", "lista", "select id_cargo, nombre_cargo from cargo order by nombre_cargo", "Cargo"),
+         ("Turno", "lista", "select id_turno, nombre_turno from turno order by hora_inicio", "Turno")],
+        "select p.id_personal, p.nombres, p.apellidos, p.telefono, concat(c.id_cargo,' - ',c.nombre_cargo), "
+        "concat(t.id_turno,' - ',t.nombre_turno) from personal p "
+        "join cargo c on p.id_cargo = c.id_cargo join turno t on p.id_turno = t.id_turno "
+        "order by p.id_personal",
         validar_personal,
-        "insert into personal (nombres, apellidos, telefono, id_cargo) values (%s, %s, %s, %s)",
-        "update personal set nombres=%s, apellidos=%s, telefono=%s, id_cargo=%s where id_personal=%s",
+        "insert into personal (nombres, apellidos, telefono, id_cargo, id_turno) values (%s, %s, %s, %s, %s)",
+        "update personal set nombres=%s, apellidos=%s, telefono=%s, id_cargo=%s, id_turno=%s where id_personal=%s",
         "delete from personal where id_personal=%s")
 
-    # ================= TURNOS =================
+    # ================= TURNOS (horarios fijos: Mañana, Tarde, Noche) =================
     refrescar["Turnos"] = crear_modulo(
         cuaderno, "Turnos",
-        [("Fecha (solo mes y día, MM-DD)", "texto", None, "Fecha"),
+        [("Nombre (4-15)", "texto", None, "Nombre"),
          ("Hora inicio (HH:MM)", "texto", None, "Inicio"),
-         ("Hora fin (HH:MM)", "texto", None, "Fin"),
-         ("Personal", "lista", "select id_personal, concat(nombres,' ',apellidos) from personal order by nombres",
-          "Personal")],
-        "select t.id_turno, date_format(t.fecha,'%m-%d'), time_format(t.hora_inicio,'%H:%i'), time_format(t.hora_fin,'%H:%i'), "
-        "concat(p.id_personal,' - ',p.nombres,' ',p.apellidos) from turno t "
-        "join personal p on t.id_personal = p.id_personal order by t.fecha desc, t.hora_inicio",
-        validar_turno, None, None, "delete from turno where id_turno=%s", armar=armar_turno)
+         ("Hora fin (HH:MM)", "texto", None, "Fin")],
+        "select id_turno, nombre_turno, time_format(hora_inicio,'%H:%i'), time_format(hora_fin,'%H:%i') "
+        "from turno order by hora_inicio",
+        validar_turno,
+        "insert into turno (nombre_turno, hora_inicio, hora_fin) values (%s, %s, %s)",
+        "update turno set nombre_turno=%s, hora_inicio=%s, hora_fin=%s where id_turno=%s",
+        "delete from turno where id_turno=%s")
 
-    # ================= ASISTENCIA =================
+    # ================= ASISTENCIA (por persona y día) =================
     refrescar["Asistencia"] = crear_modulo(
         cuaderno, "Asistencia",
-        [("Hora ingreso (HH:MM)", "texto", None, "Ingreso"),
-         ("Hora salida (opcional)", "texto", None, "Salida"),
-         ("Turno", "lista",
-          "select t.id_turno, concat(t.fecha,' ',time_format(t.hora_inicio,'%H:%i'),'-',"
-          "time_format(t.hora_fin,'%H:%i'),' ',p.nombres,' ',p.apellidos) from turno t "
-          "join personal p on t.id_personal = p.id_personal order by t.fecha desc, t.hora_inicio", "Turno")],
-        "select a.id_asistencia, time_format(a.hora_ingreso,'%H:%i'), ifnull(time_format(a.hora_salida,'%H:%i'),''), "
-        "concat(t.id_turno,' - ',t.fecha,' ',time_format(t.hora_inicio,'%H:%i'),'-',"
-        "time_format(t.hora_fin,'%H:%i'),' ',p.nombres,' ',p.apellidos) from asistencia a "
-        "join turno t on a.id_turno = t.id_turno join personal p on t.id_personal = p.id_personal "
-        "order by a.id_asistencia",
-        validar_asistencia,
-        "insert into asistencia (hora_ingreso, hora_salida, id_turno) values (%s, %s, %s)",
-        "update asistencia set hora_ingreso=%s, hora_salida=%s, id_turno=%s where id_asistencia=%s",
-        "delete from asistencia where id_asistencia=%s")
+        [("Fecha (solo mes y día, MM-DD)", "texto", None, "Fecha"),
+         ("Hora ingreso (HH:MM)", "texto", None, "Ingreso"),
+         ("Hora salida (opcional, distinta al ingreso)", "texto", None, "Salida"),
+         ("Personal", "lista", "select id_personal, concat(nombres,' ',apellidos) from personal order by nombres",
+          "Personal")],
+        "select a.id_asistencia, a.fecha, time_format(a.hora_ingreso,'%H:%i'), "
+        "ifnull(time_format(a.hora_salida,'%H:%i'),''), concat(p.id_personal,' - ',p.nombres,' ',p.apellidos) "
+        "from asistencia a join personal p on a.id_personal = p.id_personal "
+        "order by a.fecha desc, a.hora_ingreso",
+        validar_asistencia, None, None, "delete from asistencia where id_asistencia=%s", armar=armar_asistencia)
 
     # ================= USUARIOS =================
     refrescar["Usuarios"] = crear_modulo(
@@ -926,7 +967,7 @@ def abrir_principal(id_personal):
         "order by u.id_usuario",
         validar_usuario, None, None, "delete from usuario where id_usuario=%s", armar=armar_usuario)
 
-    # ================= MATEMÁTICAS =================
+    # ================= VENTANA DE MATEMÁTICAS =================
     refrescar["Matemáticas"] = crear_pestana_matematicas(cuaderno)
 
     def al_cambiar_pestana(evento):
@@ -1000,4 +1041,3 @@ ttk.Button(
     command=login
 ).pack(pady=(22, 0), ipadx=14, ipady=4)
 ventana_login.mainloop()
-

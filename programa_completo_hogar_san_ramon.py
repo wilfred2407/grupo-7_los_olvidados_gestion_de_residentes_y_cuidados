@@ -10,9 +10,6 @@ from datetime import datetime, timedelta
 
 
 # ---------------------- CONEXIÓN ----------------------
-# Base de datos en TiDB Cloud (compatible con MySQL). El servidor exige conexión segura (TLS).
-# RUTA_CA es opcional: si descargó el certificado "CA cert", escriba aquí su ruta
-# (ejemplo: r"C:\certificados\isrgrootx1.pem") para verificar el servidor.
 RUTA_CA = ""
 
 
@@ -25,7 +22,7 @@ def conectar():
         database="hogar_san_ramon",
         connection_timeout=10,
         use_pure=True,
-        ssl_disabled=False,        # conexión cifrada (TLS)
+        ssl_disabled=False,       
     )
     if RUTA_CA:
         opciones.update(ssl_ca=RUTA_CA, ssl_verify_cert=True, ssl_verify_identity=True)

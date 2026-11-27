@@ -3,16 +3,17 @@
 -- Script con las 10 tablas del diagrama E-R normalizado
 -- Cambio: turno es un catálogo (Mañana, Tarde, Noche) y
 -- muchos del personal tienen un mismo turno (muchos a uno)
+-- Cambio: cada habitación admite hasta 4 residentes (camas a, b, c, d: 1a, 1b, 1c, 1d)
 -- =====================================================
 
-CREATE DATABASE IF NOT EXISTS hogar_san_ramon;
-USE hogar_san_ramon;
+-- base de datos: hogar san ramon;
+-- USE b1wb0gm9ri14u7s5jq6z;
 
-SET GLOBAL tidb_enable_check_constraint = ON;
+
 
 -- ----------------- BORRAR TABLAS (para poder volver a ejecutar el script) -----------------
 -- se desactiva la revision de llaves foraneas solo para poder borrar en cualquier orden
--- CUIDADO: esto borra todos los datos de las tablas
+-- Esto borra todos los datos de las tablas
 SET FOREIGN_KEY_CHECKS = 0;
 drop table if exists asistencia;
 drop table if exists cuidado;
@@ -110,16 +111,20 @@ ci_residente varchar (11) not null unique,
 nombres varchar (40) not null,
 apellidos varchar (30) not null,
 fecha_nac date not null,
-id_habitacion int not null unique,
+id_habitacion int not null,
+cama char (1) not null,
 foreign key (id_habitacion) references habitacion (id_habitacion),
+CONSTRAINT uq_residente_cama UNIQUE (id_habitacion, cama),
+CONSTRAINT chk_residente_cama CHECK (cama IN ('a', 'b', 'c', 'd')),
 CONSTRAINT chk_residente_ci CHECK (ci_residente REGEXP '^[0-9]{6,8}[A-Za-z0-9]{0,3}$'),
 CONSTRAINT chk_residente_nombres_largo CHECK (CHAR_LENGTH(TRIM(nombres)) >= 3),
 CONSTRAINT chk_residente_apellidos_largo CHECK (CHAR_LENGTH(TRIM(apellidos)) >= 3),
 CONSTRAINT chk_residente_fecha_nac CHECK (fecha_nac < '2000-01-01')
 );
 -- 11 en ci porque algunos carnets tienen extension, y el carnet no se puede repetir
--- la habitacion ahora es una tabla aparte (normalizacion)
--- id_habitacion es unico: dos residentes no pueden ocupar la misma habitacion
+-- la habitacion es una tabla aparte (normalizacion)
+-- una habitacion admite maximo 4 residentes: cada uno ocupa una cama (a, b, c o d), por ejemplo 1a, 1b, 1c, 1d
+-- el par (id_habitacion, cama) es unico: dos residentes no pueden ocupar la misma cama de la misma habitacion
 
 -- ----------------- TABLA 8: plan_atencion -----------------
 create table plan_atencion (
@@ -160,10 +165,10 @@ hora_ingreso time not null,
 hora_salida time null,
 id_personal int not null,
 foreign key (id_personal) references personal (id_personal),
-unique (id_personal, fecha),
+CONSTRAINT uq_asistencia_persona_dia UNIQUE (id_personal, fecha),
 CONSTRAINT chk_asistencia_horas CHECK (hora_salida IS NULL OR hora_ingreso <> hora_salida)
 );
--- la asistencia ahora se guarda por persona y por fecha (antes dependia del turno)
+-- la asistencia se guarda por persona y por fecha
 -- una persona solo puede tener una asistencia por dia
 -- hora_salida puede quedar vacia hasta que la persona termine su turno
 -- si se registra la hora de salida, no puede ser igual a la hora de ingreso

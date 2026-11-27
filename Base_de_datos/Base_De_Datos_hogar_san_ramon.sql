@@ -12,7 +12,8 @@ SET GLOBAL tidb_enable_check_constraint = ON;
 
 -- ----------------- BORRAR TABLAS (para poder volver a ejecutar el script) -----------------
 -- se desactiva la revision de llaves foraneas solo para poder borrar en cualquier orden
--- esto borra todos los datos de las tablas
+-- CUIDADO: esto borra todos los datos de las tablas
+SET FOREIGN_KEY_CHECKS = 0;
 drop table if exists asistencia;
 drop table if exists cuidado;
 drop table if exists plan_atencion;
@@ -23,6 +24,10 @@ drop table if exists turno;
 drop table if exists habitacion;
 drop table if exists cargo;
 drop table if exists rol;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- primero se crean las tablas que no dependen de otras
+-- y despues las que tienen llaves foraneas (foreign key)
 
 -- ----------------- TABLA 1: rol -----------------
 create table rol (

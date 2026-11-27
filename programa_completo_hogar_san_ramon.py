@@ -25,7 +25,7 @@ def conectar():
         database="hogar_san_ramon",
         connection_timeout=10,
         use_pure=True,
-        ssl_disabled=False,        
+        ssl_disabled=False,        # conexión cifrada (TLS)
     )
     if RUTA_CA:
         opciones.update(ssl_ca=RUTA_CA, ssl_verify_cert=True, ssl_verify_identity=True)
@@ -51,12 +51,14 @@ def mostrar_error(e):
     if codigo == 1062:
         if "ci_residente" in detalle:
             mensaje = "Ya existe un residente con ese CI."
+        elif "id_habitacion" in detalle:
+            mensaje = "Esa habitación ya está ocupada por otro residente."
         elif "nombre_usuario" in detalle:
             mensaje = "Ese nombre de usuario ya existe."
         elif "usuario.id_personal" in detalle:
             mensaje = "Esa persona del personal ya tiene un usuario."
         elif "turno.id_personal" in detalle:
-            mensaje = "Esa persona ya tiene un turno que empieza ese día a esa hora."
+            mensaje = "Esa persona ya tiene un turno ese día (solo se permite un turno por persona por día)."
         elif "id_turno" in detalle:
             mensaje = "Ese turno ya tiene una asistencia registrada."
         else:
@@ -128,6 +130,18 @@ def hora_valida(texto):
         return None
 
 
+# límites de la fecha de inicio del plan de atención (iguales al CHECK de la tabla plan_atencion)
+PLAN_FECHA_MIN = datetime(2020, 1, 1)
+PLAN_FECHA_MAX = datetime(2030, 12, 31)
+
+
+def fecha_turno(texto):
+    # el turno se escribe solo con mes y día (MM-DD); el año es el año actual
+    if re.fullmatch(r"[0-9]{2}-[0-9]{2}", texto) is None:
+        return None
+    return fecha_valida(f"{datetime.now().year}-{texto}")
+
+
 # Cada validar_xxx recibe la lista de valores del formulario (en el mismo orden de los campos)
 # y devuelve un texto con el error, o None si todo está bien. "nuevo" es True al registrar.
 def validar_plan(v, nuevo):
@@ -137,6 +151,9 @@ def validar_plan(v, nuevo):
     f_ini = fecha_valida(inicio)
     if f_ini is None:
         return "Fecha de inicio inválida. Use el formato AAAA-MM-DD."
+    if not PLAN_FECHA_MIN <= f_ini <= PLAN_FECHA_MAX:
+        return (f"La fecha de inicio debe estar entre {PLAN_FECHA_MIN:%Y-%m-%d} "
+                f"y {PLAN_FECHA_MAX:%Y-%m-%d}.")
     if fin:
         f_fin = fecha_valida(fin)
         if f_fin is None:
@@ -163,8 +180,8 @@ def validar_personal(v, nuevo):
 
 def validar_turno(v, nuevo):
     fecha, inicio, fin, personal = v
-    if fecha_valida(fecha) is None:
-        return "Fecha inválida. Use el formato AAAA-MM-DD."
+    if fecha_turno(fecha) is None:
+        return "Fecha inválida. Escriba solo el mes y el día con el formato MM-DD (ejemplo 11-26)."
     h_ini = hora_valida(inicio)
     h_fin = hora_valida(fin)
     if h_ini is None or h_fin is None:
@@ -182,6 +199,8 @@ def validar_asistencia(v, nuevo):
         return "La hora de ingreso debe tener el formato HH:MM (ejemplo 08:30)."
     if salida and hora_valida(salida) is None:
         return "La hora de salida debe tener el formato HH:MM o quedar vacía."
+    if salida and hora_valida(salida) == hora_valida(ingreso):
+        return "La hora de ingreso debe ser diferente a la hora de salida."
     if not turno:
         return "Elija un turno."
     return None
@@ -399,6 +418,16 @@ def armar_usuario(d, id_):
                 (usuario, hashlib.sha256(clave.encode()).hexdigest(), estado, rol, personal, id_))
     return ("update usuario set nombre_usuario=%s, estado=%s, id_rol=%s, id_personal=%s "
             "where id_usuario=%s", (usuario, estado, rol, personal, id_))
+
+
+def armar_turno(d, id_):
+    # la fecha se escribe como MM-DD; aquí se completa con el año actual para guardarla
+    fecha = fecha_turno(d[0]).strftime("%Y-%m-%d")
+    if id_ is None:
+        return ("insert into turno (fecha, hora_inicio, hora_fin, id_personal) values (%s, %s, %s, %s)",
+                (fecha, d[1], d[2], d[3]))
+    return ("update turno set fecha=%s, hora_inicio=%s, hora_fin=%s, id_personal=%s where id_turno=%s",
+            (fecha, d[1], d[2], d[3], id_))
 
 
 # ---------------------- MATEMÁTICAS ----------------------
@@ -856,18 +885,15 @@ def abrir_principal(id_personal):
     # ================= TURNOS =================
     refrescar["Turnos"] = crear_modulo(
         cuaderno, "Turnos",
-        [("Fecha (AAAA-MM-DD)", "texto", None, "Fecha"),
+        [("Fecha (solo mes y día, MM-DD)", "texto", None, "Fecha"),
          ("Hora inicio (HH:MM)", "texto", None, "Inicio"),
          ("Hora fin (HH:MM)", "texto", None, "Fin"),
          ("Personal", "lista", "select id_personal, concat(nombres,' ',apellidos) from personal order by nombres",
           "Personal")],
-        "select t.id_turno, t.fecha, time_format(t.hora_inicio,'%H:%i'), time_format(t.hora_fin,'%H:%i'), "
+        "select t.id_turno, date_format(t.fecha,'%m-%d'), time_format(t.hora_inicio,'%H:%i'), time_format(t.hora_fin,'%H:%i'), "
         "concat(p.id_personal,' - ',p.nombres,' ',p.apellidos) from turno t "
         "join personal p on t.id_personal = p.id_personal order by t.fecha desc, t.hora_inicio",
-        validar_turno,
-        "insert into turno (fecha, hora_inicio, hora_fin, id_personal) values (%s, %s, %s, %s)",
-        "update turno set fecha=%s, hora_inicio=%s, hora_fin=%s, id_personal=%s where id_turno=%s",
-        "delete from turno where id_turno=%s")
+        validar_turno, None, None, "delete from turno where id_turno=%s", armar=armar_turno)
 
     # ================= ASISTENCIA =================
     refrescar["Asistencia"] = crear_modulo(
@@ -977,3 +1003,4 @@ ttk.Button(
     command=login
 ).pack(pady=(22, 0), ipadx=14, ipady=4)
 ventana_login.mainloop()
+

@@ -68,3 +68,5 @@ cajas de Fecha, hora de inicio, hora de fin y persona asignada y la ultima venta
 
 # 25-11-2026
 en el día de hoy después de realizar las restricciones realizamos la ultimas ventana creo que es el de matemáticas que es un análisis de la semana y designación de turnos y también se agrego la parte del aporte de las matemáticas en nuestro programa de Python. interfaz grafica final.
+# 26-11-2026
+en el día de hoy se corrigió las tablas y se modifico la base de datos creando y llevando el código a uno nuevo por algunas fallas que hubo en la aplicación que utilizamos para crear nuestra base de datos en la nube y posteriormente se modifico algunas de las fallas que notamos en el programa y base de datos como la fecha de inicio en plan de atención, colocar limites, pusimos los demás campos en el cargo como cuidador, enfermero, doctor, etc. y solo un horario por día para que no se repita y demás y así demás cambios. 

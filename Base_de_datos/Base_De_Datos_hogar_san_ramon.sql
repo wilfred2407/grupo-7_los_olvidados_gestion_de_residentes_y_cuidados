@@ -87,7 +87,7 @@ ci_residente varchar (11) not null unique,
 nombres varchar (40) not null,
 apellidos varchar (30) not null,
 fecha_nac date not null,
-id_habitacion int not null,
+id_habitacion int not null unique,
 foreign key (id_habitacion) references habitacion (id_habitacion),
 CONSTRAINT chk_residente_ci CHECK (ci_residente REGEXP '^[0-9]{6,8}[A-Za-z0-9]{0,3}$'),
 CONSTRAINT chk_residente_nombres_largo CHECK (CHAR_LENGTH(TRIM(nombres)) >= 3),
@@ -96,6 +96,7 @@ CONSTRAINT chk_residente_fecha_nac CHECK (fecha_nac < '2000-01-01')
 );
 -- 11 en ci porque algunos carnets tienen extension, y el carnet no se puede repetir
 -- la habitacion ahora es una tabla aparte (normalizacion)
+-- id_habitacion es unico: dos residentes no pueden ocupar la misma habitacion
 
 -- ----------------- TABLA 7: plan_atencion -----------------
 create table plan_atencion (
@@ -106,9 +107,11 @@ fecha_fin date null,
 id_residente int not null,
 foreign key (id_residente) references residente (id_residente),
 CONSTRAINT chk_plan_descripcion_largo CHECK (CHAR_LENGTH(TRIM(descripcion)) >= 5),
+CONSTRAINT chk_plan_fecha_inicio CHECK (fecha_inicio BETWEEN '2020-01-01' AND '2030-12-31'),
 CONSTRAINT chk_plan_fechas CHECK (fecha_fin IS NULL OR fecha_fin >= fecha_inicio)
 );
 -- un residente puede tener varios planes de atencion con el tiempo (relacion 1 a muchos)
+-- la fecha de inicio tiene un limite: debe estar entre 2020-01-01 y 2030-12-31
 -- fecha_fin puede quedar vacia si el plan todavia sigue vigente
 -- si se registra una fecha de finalizacion, no puede ser anterior a la fecha de inicio
 
@@ -134,10 +137,11 @@ hora_inicio time not null,
 hora_fin time not null,
 id_personal int not null,
 foreign key (id_personal) references personal (id_personal),
-unique (id_personal, fecha, hora_inicio),
+unique (id_personal, fecha),
 CONSTRAINT chk_turno_horas CHECK (hora_inicio <> hora_fin)
 );
--- la misma persona no puede tener dos turnos que empiecen el mismo dia a la misma hora
+-- la misma persona solo puede tener un turno por dia
+-- (en el programa el turno se escribe solo con mes y dia, el año es el actual)
 -- y la hora de inicio debe ser diferente de la hora de finalizacion
 
 -- ----------------- TABLA 10: asistencia -----------------
@@ -146,10 +150,12 @@ id_asistencia int primary key auto_increment,
 hora_ingreso time not null,
 hora_salida time null,
 id_turno int not null unique,
-foreign key (id_turno) references turno (id_turno)
+foreign key (id_turno) references turno (id_turno),
+CONSTRAINT chk_asistencia_horas CHECK (hora_salida IS NULL OR hora_ingreso <> hora_salida)
 );
 -- cada asistencia pertenece a un turno (relacion 1 a 1)
 -- hora_salida puede quedar vacia hasta que la persona termine su turno
+-- si se registra la hora de salida, no puede ser igual a la hora de ingreso
 
 -- ----------------- DATOS INICIALES -----------------
 insert into rol (nombre_rol) values ('administrador/a'),('doctor/a'),('enfermero/a'),('cuidador/a'),('limpieza/a');
